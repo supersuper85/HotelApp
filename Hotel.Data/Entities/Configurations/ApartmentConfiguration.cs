@@ -13,12 +13,13 @@ namespace HotelApp.Data.Entities.Configurations
             builder.Property(x => x.DailyRentInEuro).IsRequired();
 
             builder.Property(x => x.NumberOfRooms).IsRequired();
-            builder.HasIndex(x => x.NumberOfRooms).IsUnique();
+
+            builder.Property(x => x.RoomNumber).IsRequired();
+            builder.HasIndex(x => x.RoomNumber).IsUnique();
+
+            builder.Property(x => x.ReservationId).IsRequired();
+
+            builder.Property(x => x.HotelId).IsRequired();
         }
     }
 }
-/*public float DailyRentInEuro { get; set; }
-public int NumberOfRooms { get; set; }
-public int RoomNumber { get; set; }
-public int ReservationId { get; set; }
-public int HotelId { get; set; }*/

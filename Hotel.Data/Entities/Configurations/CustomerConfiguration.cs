@@ -11,11 +11,13 @@ namespace HotelApp.Data.Entities.Configurations
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
             builder.Property(x => x.Name).IsRequired();
-
             builder.Property(x => x.Name).HasMaxLength(100);
+
             builder.Property(x => x.Age).IsRequired();
 
             builder.Property(x => x.ApartmentId).IsRequired();
+
+            builder.Property(x => x.ReservationId).IsRequired();
 
             builder.HasOne(c => c.Reservation)
                 .WithOne(c => c.Customer)
