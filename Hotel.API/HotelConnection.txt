@@ -1,0 +1,1 @@
+Server=localhost\\SQLEXPRESS;Database=hotelDatabase;Trusted_Connection=True;
