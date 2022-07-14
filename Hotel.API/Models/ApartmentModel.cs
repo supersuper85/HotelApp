@@ -15,6 +15,8 @@ namespace HotelApp.API.Models
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "The apartment number cannot be 0!")]
         public int RoomNumber { get; set; }
+
+        public int CustomerId { get; set; }
         public int ReservationId { get; set; }
         public int HotelId { get; set; }
     }

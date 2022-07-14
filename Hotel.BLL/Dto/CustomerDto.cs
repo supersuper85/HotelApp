@@ -12,8 +12,7 @@ namespace HotelApp.BLL.Dto
         public int Age { get; set; }
         public string Name { get; set; } 
         public int ApartmentId { get; set; }
-        public virtual ApartmentDto Apartment { get; set; }
         public int ReservationId { get; set; }
-        public virtual ReservationDto Reservation { get; set; }
+        public int HotelId { get; set; }
     }
 }

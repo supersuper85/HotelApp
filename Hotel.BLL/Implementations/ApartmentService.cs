@@ -70,7 +70,7 @@ namespace HotelApp.BLL.Implementations
 
         public async Task<IList<ApartmentDto>> GetAllAvailableHotelRooms()
         {
-            var books = await _hotelRoomRepository.GetAllAvailableHotelRooms();
+            var books = await _hotelRoomRepository.GetAllAvailableApartments();
             return _mapper.Map<IList<ApartmentDto>>(books);
 
         }

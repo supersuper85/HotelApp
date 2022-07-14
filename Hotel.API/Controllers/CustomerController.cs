@@ -15,16 +15,16 @@ namespace HotelApp.API.Controllers
     public class CustomerController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly ICustomerService _bookService;
+        private readonly ICustomerService _customerService;
         private readonly ILogger<CustomerController> _logger;
 
         public CustomerController(
            IMapper mapper,
-           ICustomerService bookService,
+           ICustomerService customerService,
            ILogger<CustomerController> logger)
         {
             _mapper = mapper;
-            _bookService = bookService;
+            _customerService = customerService;
             _logger = logger;
         }
 
@@ -33,7 +33,7 @@ namespace HotelApp.API.Controllers
         {
             try
             {
-                var result = await _bookService.GetAll();
+                var result = await _customerService.GetAll();
                 var mappedResult = _mapper.Map<IList<CustomerModel>>(result);
 
                 return Ok(mappedResult);

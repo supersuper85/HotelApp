@@ -4,6 +4,7 @@ using HotelApp.Data.Entities.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelApp.Data.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220714073456_ModifyDatabaseStruct")]
+    partial class ModifyDatabaseStruct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,28 +58,6 @@ namespace HotelApp.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Apartment");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CustomerId = 0,
-                            DailyRentInEuro = 25f,
-                            HotelId = 1,
-                            NumberOfRooms = 2,
-                            ReservationId = 0,
-                            RoomNumber = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CustomerId = 0,
-                            DailyRentInEuro = 35f,
-                            HotelId = 1,
-                            NumberOfRooms = 3,
-                            ReservationId = 1,
-                            RoomNumber = 2
-                        });
                 });
 
             modelBuilder.Entity("HotelApp.Data.Entities.Customer", b =>
@@ -113,17 +93,6 @@ namespace HotelApp.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Customer");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Age = 20,
-                            ApartmentId = 2,
-                            HotelId = 1,
-                            Name = "Cristi",
-                            ReservationId = 1
-                        });
                 });
 
             modelBuilder.Entity("HotelApp.Data.Entities.Hotel", b =>
@@ -145,18 +114,6 @@ namespace HotelApp.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Hotel");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Roman"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Transilvania"
-                        });
                 });
 
             modelBuilder.Entity("HotelApp.Data.Entities.Reservation", b =>
@@ -184,16 +141,6 @@ namespace HotelApp.Data.Migrations
                     b.HasIndex("HotelId");
 
                     b.ToTable("Reservation");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ApartmentId = 2,
-                            HotelId = 1,
-                            RegistrationDate = new DateTime(2022, 7, 14, 9, 13, 19, 218, DateTimeKind.Utc).AddTicks(2573),
-                            ReleaseDate = new DateTime(2022, 7, 15, 9, 13, 19, 218, DateTimeKind.Utc).AddTicks(2575)
-                        });
                 });
 
             modelBuilder.Entity("HotelApp.Data.Entities.Apartment", b =>

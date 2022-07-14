@@ -19,9 +19,16 @@ namespace HotelApp.Data.Entities.Configurations
 
             builder.Property(x => x.ReservationId).IsRequired();
 
-            builder.HasOne(c => c.Reservation)
-                .WithOne(c => c.Customer)
-                .HasForeignKey<Reservation>(c => c.CustomerId);
+            builder.HasData(new Customer
+            {
+                Id = 1,
+                Age = 20,
+                Name = "Cristi",
+
+                ApartmentId = 2,
+                ReservationId = 1,
+                HotelId = 1
+            });
         }
     }
 }

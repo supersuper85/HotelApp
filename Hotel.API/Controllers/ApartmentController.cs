@@ -15,25 +15,25 @@ namespace HotelApp.API.Controllers
     public class ApartmentController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IApartmentService _hotelRoomService;
+        private readonly IApartmentService _apartmentService;
         private readonly ILogger<ApartmentController> _logger;
 
         public ApartmentController(
            IMapper mapper,
-           IApartmentService hotelRoomService,
+           IApartmentService apartmentService,
            ILogger<ApartmentController> logger)
         {
             _mapper = mapper;
-            _hotelRoomService = hotelRoomService;
+            _apartmentService = apartmentService;
             _logger = logger;
         }
 
-        [HttpGet("GetAllAvailableRooms")]
-        public async Task<IActionResult> GetAllAvailableRooms()
+        [HttpGet("GetAllAvailableApartments")]
+        public async Task<IActionResult> GetAllAvailableApartments()
         {
             try
             {
-                var result = await _hotelRoomService.GetAllAvailableHotelRooms();
+                var result = await _apartmentService.GetAllAvailableHotelRooms();
                 var mappedResult = _mapper.Map<IList<ApartmentModel>>(result);
 
                 return Ok(mappedResult);

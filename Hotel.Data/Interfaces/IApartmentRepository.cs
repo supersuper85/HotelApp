@@ -4,6 +4,6 @@ namespace HotelApp.Data.Interfaces
 {
     public interface IApartmentRepository<T> where T : class
     {
-        Task<IList<T>> GetAllAvailableHotelRooms(CancellationToken cancellationToken = default(CancellationToken));
+        Task<IList<T>> GetAllAvailableApartments(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

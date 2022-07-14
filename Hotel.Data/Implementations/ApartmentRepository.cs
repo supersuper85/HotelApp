@@ -16,7 +16,7 @@ namespace HotelApp.Data.Implementations
             Context = context;
             _entities = context.Set<T>();
         }
-        public async Task<IList<T>> GetAllAvailableHotelRooms(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IList<T>> GetAllAvailableApartments(CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _entities.Where(s => s.ReservationId == 0).ToListAsync(cancellationToken);
         }

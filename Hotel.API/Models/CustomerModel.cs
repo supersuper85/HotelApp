@@ -15,8 +15,7 @@ namespace HotelApp.API.Models
 
         [Required]
         public int ApartmentId { get; set; }
-        public virtual ApartmentModel Apartment { get; set; }
         public int ReservationId { get; set; }
-        public virtual ReservationModel Reservation { get; set; }
+        public int HotelId { get; set; }
     }
 }

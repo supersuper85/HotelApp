@@ -9,6 +9,8 @@ namespace HotelApp.API.Extensions.ServiceCollection
         {
             services.AddTransient<IApartmentService, ApartmentService>();
             services.AddTransient<ICustomerService, CustomerService>();
+            services.AddTransient<IReservationService, ReservationService>();
+            //services.AddTransient<IHotelService, CustomerService>();
         }
     }
 }

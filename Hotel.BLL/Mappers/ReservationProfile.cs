@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HotelApp.BLL.Mappers
 {
-    internal class ReservationProfile : Profile
+    public class ReservationProfile : Profile
     {
         public ReservationProfile()
         {

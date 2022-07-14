@@ -12,6 +12,8 @@ namespace HotelApp.BLL.Dto
         public float DailyRent { get; set; }
         public int DailyRentInEuro { get; set; }
         public int RoomNumber { get; set; }
+
+        public int CustomerId { get; set; }
         public int ReservationId { get; set; }
         public int HotelId { get; set; }
     }
