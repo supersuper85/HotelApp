@@ -15,7 +15,6 @@ namespace HotelApp.Data.Entities.Configurations
 
             builder.Property(x => x.CNP).IsRequired();
             builder.Property(x => x.CNP).HasMaxLength(13);
-            //builder.HasIndex(x => x.CNP).IsUnique();
 
             builder.Property(x => x.Age).IsRequired();
 

@@ -10,7 +10,7 @@ namespace HotelApp.BLL.Interfaces
     public interface IReservationService
     {
         Task<IList<ReservationDto>> GetAll();
-        Task<IList<ReservationDto>> GetAllReservationsWithTheirCustomers(CancellationToken cancellationToken = default(CancellationToken));
+        Task<IList<ReservationDto>> GetAllReservationsWithTheirCustomers();
         Task<ReservationDto> Get(int id);
         Task<ReservationDto> Add(ReservationDto model);
         Task<bool> Edit(ReservationDto model);

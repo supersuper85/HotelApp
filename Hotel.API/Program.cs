@@ -30,5 +30,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-//builder.Configuration.AddJsonFile
