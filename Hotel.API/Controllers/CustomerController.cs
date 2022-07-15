@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace HotelApp.API.Controllers
 {
+    [ApiController]
     [Route(RouteConstants.RouteCustomer)]
     public class CustomerController : Controller
     {
@@ -28,7 +29,7 @@ namespace HotelApp.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet("getAll")]
+        /*[HttpGet("getAll")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -43,6 +44,6 @@ namespace HotelApp.API.Controllers
                 _logger.LogError(e.Message);
                 return BadRequest();
             }
-        }
+        }*/
     }
 }

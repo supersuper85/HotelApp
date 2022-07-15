@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace HotelApp.API.Controllers
 {
+    [ApiController]
     [Route(RouteConstants.RouteCustomer)]
     public class ApartmentController : Controller
     {

@@ -4,6 +4,7 @@ using HotelApp.Data.Entities.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelApp.Data.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220714112233_Seeding2")]
+    partial class Seeding2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,11 +96,6 @@ namespace HotelApp.Data.Migrations
                     b.Property<int>("ApartmentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CNP")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
-
                     b.Property<int>("HotelId")
                         .HasColumnType("int");
 
@@ -112,13 +109,9 @@ namespace HotelApp.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("HotelId");
+
                     b.HasIndex("ReservationId")
-                        .IsUnique();
-
-                    b.HasIndex("ApartmentId", "HotelId")
-                        .IsUnique();
-
-                    b.HasIndex("HotelId", "CNP")
                         .IsUnique();
 
                     b.ToTable("Customer");
@@ -129,7 +122,6 @@ namespace HotelApp.Data.Migrations
                             Id = 1,
                             Age = 20,
                             ApartmentId = 2,
-                            CNP = "1234567891011",
                             HotelId = 1,
                             Name = "Cristi",
                             ReservationId = 1
@@ -166,11 +158,6 @@ namespace HotelApp.Data.Migrations
                         {
                             Id = 2,
                             Name = "Transilvania"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Roscu"
                         });
                 });
 
@@ -206,8 +193,8 @@ namespace HotelApp.Data.Migrations
                             Id = 1,
                             ApartmentId = 2,
                             HotelId = 1,
-                            RegistrationDate = new DateTime(2022, 7, 15, 12, 12, 57, 604, DateTimeKind.Utc).AddTicks(5497),
-                            ReleaseDate = new DateTime(2022, 7, 16, 12, 12, 57, 604, DateTimeKind.Utc).AddTicks(5498)
+                            RegistrationDate = new DateTime(2022, 7, 14, 11, 22, 33, 426, DateTimeKind.Utc).AddTicks(7784),
+                            ReleaseDate = new DateTime(2022, 7, 15, 11, 22, 33, 426, DateTimeKind.Utc).AddTicks(7785)
                         });
                 });
 

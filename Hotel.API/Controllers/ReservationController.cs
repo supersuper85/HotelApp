@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HotelApp.API.InputModels;
 using HotelApp.API.Models;
 using HotelApp.BLL.Dto;
 using HotelApp.BLL.Interfaces;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HotelApp.API.Controllers
 {
+    [ApiController]
     public class ReservationController : Controller
     {
         private readonly IMapper _mapper;
@@ -22,8 +24,25 @@ namespace HotelApp.API.Controllers
             _logger = logger;
         }
 
+        [HttpGet("GetAllReservationsWithTheirCustomers")]
+        public async Task<IActionResult> GetAllReservationsWithTheirCustomers()
+        {
+            try
+            {
+                var result = await _reservationService.GetAllReservationsWithTheirCustomers();
+                var mappedResult = _mapper.Map<IList<ReservationModel>>(result);
+
+                return Ok(mappedResult);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return BadRequest();
+            }
+        }
+
         [HttpPost("CreateReservation")]
-        public async Task<IActionResult> Create([FromBody] ReservationModel model)
+        public async Task<IActionResult> Create([FromBody] ReservationInputModel model)
         {
             try
             {
@@ -31,6 +50,11 @@ namespace HotelApp.API.Controllers
                 var reservation = await _reservationService.Add(mappedModel);
 
                 return Ok(reservation);
+            }
+            catch (ArgumentException Exception)
+            {
+                _logger.LogError(Exception.Message);
+                return this.StatusCode(StatusCodes.Status400BadRequest, Exception.Message);
             }
             catch (Exception e)
             {

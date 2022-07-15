@@ -1,4 +1,6 @@
-﻿namespace HotelApp.API.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace HotelApp.API.Models
 {
     public class ReservationModel
     {

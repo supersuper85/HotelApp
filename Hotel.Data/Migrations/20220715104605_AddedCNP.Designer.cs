@@ -4,6 +4,7 @@ using HotelApp.Data.Entities.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelApp.Data.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220715104605_AddedCNP")]
+    partial class AddedCNP
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,13 +114,12 @@ namespace HotelApp.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CNP")
+                        .IsUnique();
+
+                    b.HasIndex("HotelId");
+
                     b.HasIndex("ReservationId")
-                        .IsUnique();
-
-                    b.HasIndex("ApartmentId", "HotelId")
-                        .IsUnique();
-
-                    b.HasIndex("HotelId", "CNP")
                         .IsUnique();
 
                     b.ToTable("Customer");
@@ -206,8 +207,8 @@ namespace HotelApp.Data.Migrations
                             Id = 1,
                             ApartmentId = 2,
                             HotelId = 1,
-                            RegistrationDate = new DateTime(2022, 7, 15, 12, 12, 57, 604, DateTimeKind.Utc).AddTicks(5497),
-                            ReleaseDate = new DateTime(2022, 7, 16, 12, 12, 57, 604, DateTimeKind.Utc).AddTicks(5498)
+                            RegistrationDate = new DateTime(2022, 7, 15, 10, 46, 4, 693, DateTimeKind.Utc).AddTicks(6846),
+                            ReleaseDate = new DateTime(2022, 7, 16, 10, 46, 4, 693, DateTimeKind.Utc).AddTicks(6847)
                         });
                 });
 

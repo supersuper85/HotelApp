@@ -2,7 +2,7 @@
 using HotelApp.BLL.Dto;
 using HotelApp.API.Models;
 
-namespace HotelApp.API.Mappers
+namespace HotelApp.API.Mappers.ModelMappers
 {
     internal class CustomerProfile : Profile
     {

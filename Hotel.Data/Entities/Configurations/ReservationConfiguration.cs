@@ -22,6 +22,7 @@ namespace HotelApp.Data.Entities.Configurations
                 Id = 1,
                 RegistrationDate = DateTime.UtcNow,
                 ReleaseDate = DateTime.UtcNow.AddDays(1),
+
                 ApartmentId = 2,
                 HotelId = 1,
             });

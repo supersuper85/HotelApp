@@ -14,16 +14,22 @@ namespace HotelApp.Data.Entities.Configurations
             builder.HasIndex(x => x.Name).IsUnique();
             builder.Property(x => x.Name).HasMaxLength(100);
 
-            builder.HasData(new Hotel
-            {
-                Id = 1,
-                Name = "Roman",
-            });
-            builder.HasData(new Hotel
-            {
-                Id = 2,
-                Name = "Transilvania",
-            });
+            builder.HasData(
+                new Hotel
+                {
+                    Id = 1,
+                    Name = "Roman",
+                },
+                new Hotel
+                {
+                    Id = 2,
+                    Name = "Transilvania",
+                },
+                new Hotel
+                {
+                    Id = 3,
+                    Name = "Roscu",
+                });
         }
     }
 }

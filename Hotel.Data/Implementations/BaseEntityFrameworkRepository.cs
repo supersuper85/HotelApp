@@ -44,7 +44,7 @@ namespace HotelApp.Data.Implementations
             _entities.AnyAsync(predicate, cancellationToken);
 
         public virtual async Task<ICollection<T>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken)) =>
-            await _entities.ToListAsync(cancellationToken);
+            await _entities.Include("Customer").ToListAsync(cancellationToken);
 
         public async Task<ICollection<T>> FilterAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default(CancellationToken))
         => await _entities.Where(predicate).ToListAsync(cancellationToken);
