@@ -51,11 +51,6 @@ namespace HotelApp.API.Controllers
 
                 return Ok(reservation);
             }
-            catch (ArgumentException Exception)
-            {
-                _logger.LogError(Exception.Message);
-                return this.StatusCode(StatusCodes.Status400BadRequest, Exception.Message);
-            }
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
