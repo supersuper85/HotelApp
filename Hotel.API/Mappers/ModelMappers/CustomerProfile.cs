@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using HotelApp.BLL.Dto;
-using HotelApp.API.Models;
+using HotelApp.API.Models.CustomerModels;
 
 namespace HotelApp.API.Mappers.ModelMappers
 {

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using HotelApp.API.InputModels;
-using HotelApp.API.Models;
+using HotelApp.API.Models.ReservationModels;
 using HotelApp.BLL.Dto;
 using HotelApp.BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;

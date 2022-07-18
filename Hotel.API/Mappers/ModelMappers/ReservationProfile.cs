@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using HotelApp.API.Models;
+using HotelApp.API.Models.ReservationModels;
 using HotelApp.BLL.Dto;
 
 namespace HotelApp.API.Mappers.ModelMappers

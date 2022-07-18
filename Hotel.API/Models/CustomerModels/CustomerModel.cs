@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HotelApp.API.Models
+namespace HotelApp.API.Models.CustomerModels
 {
     public class CustomerModel
     {

@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using HotelApp.API.Constants;
 using AutoMapper;
-using HotelApp.API.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using HotelApp.BLL.Dto;
 using HotelApp.BLL.Interfaces;
 using Microsoft.Extensions.Logging;
+using HotelApp.API.Models.ApartmentModels;
 
 namespace HotelApp.API.Controllers
 {

@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HotelApp.API.Models.CustomerModels;
+using System.ComponentModel.DataAnnotations;
 
-namespace HotelApp.API.Models
+namespace HotelApp.API.Models.ReservationModels
 {
     public class ReservationModel
     {
@@ -11,6 +12,6 @@ namespace HotelApp.API.Models
         public int ApartmentId { get; set; }
         public CustomerModel Customer { get; set; }
         public int HotelId { get; set; }
-        
+
     }
 }

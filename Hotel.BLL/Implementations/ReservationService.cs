@@ -25,7 +25,7 @@ namespace HotelApp.BLL.Implementations
             return _mapper.Map<IList<ReservationDto>>(reservations);
         }
 
-        public async Task<IList<ReservationDto>> GetAllReservationsWithTheirCustomers(CancellationToken cancellationToken = default)
+        public async Task<IList<ReservationDto>> GetAllReservationsWithTheirCustomers()
         {
             var reservations = await _reservationRepository.GetAllReservationsWithTheirCustomers();
             return _mapper.Map<IList<ReservationDto>>(reservations);
@@ -73,6 +73,5 @@ namespace HotelApp.BLL.Implementations
             return null;
         }
 
-        
     }
 }
