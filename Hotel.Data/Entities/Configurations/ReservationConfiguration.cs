@@ -16,16 +16,27 @@ namespace HotelApp.Data.Entities.Configurations
 
             builder.Property(x => x.HotelId).IsRequired();
 
+            builder.HasOne(x => x.Customer).WithOne().HasForeignKey<Customer>(x => x.ReservationId);
+            builder.HasIndex(x => new { x.HotelId, x.ApartmentId }).IsUnique();
 
             builder.HasData(new Reservation
             {
                 Id = 1,
                 RegistrationDate = DateTime.UtcNow,
-                ReleaseDate = DateTime.UtcNow.AddDays(1),
+                ReleaseDate = GetReleaseDate(1),
 
                 ApartmentId = 2,
                 HotelId = 1,
             });
+        }
+        public DateTime GetReleaseDate(int numberOfDays)
+        {
+            var initialDate = DateTime.UtcNow.AddDays(numberOfDays);
+            int releaseHour = 12;
+            int releaseMinute = 0;
+            int releaseSecond = 0;
+            DateTime releaseDate = new DateTime(initialDate.Year, initialDate.Month, initialDate.Day, releaseHour, releaseMinute, releaseSecond);
+            return releaseDate;
         }
     }
 }

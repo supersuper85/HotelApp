@@ -2,6 +2,7 @@
 using HotelApp.Data.Entities.Context;
 using HotelApp.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace HotelApp.Data.Implementations
 {
@@ -15,9 +16,14 @@ namespace HotelApp.Data.Implementations
             Context = context;
             _entities = context.Set<T>();
         }
+
         public async Task<IList<T>> GetAllReservationsWithTheirCustomers(CancellationToken cancellationToken = default)
         {
             return await _entities.Include("Customer").ToListAsync(cancellationToken);
+        }
+
+        public async Task<T> GetAReservationWithHisCustomer(int id, CancellationToken cancellationToken = default(CancellationToken)) {
+            return await _entities.Include("Customer").SingleOrDefaultAsync(x => x.Id == id);
         }
     }
 }

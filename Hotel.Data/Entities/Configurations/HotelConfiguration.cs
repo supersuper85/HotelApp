@@ -14,6 +14,10 @@ namespace HotelApp.Data.Entities.Configurations
             builder.HasIndex(x => x.Name).IsUnique();
             builder.Property(x => x.Name).HasMaxLength(100);
 
+            builder.HasMany(x => x.Customers).WithOne().HasForeignKey(x => x.HotelId);
+            builder.HasMany(x => x.Apartments).WithOne().HasForeignKey(x => x.HotelId);
+            builder.HasMany(x => x.Reservations).WithOne().HasForeignKey(x => x.HotelId); 
+
             builder.HasData(
                 new Hotel
                 {

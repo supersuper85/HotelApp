@@ -11,9 +11,9 @@ namespace HotelApp.BLL.Interfaces
     {
         Task<IList<ReservationDto>> GetAll();
         Task<IList<ReservationDto>> GetAllReservationsWithTheirCustomers();
-        Task<ReservationDto> Get(int id);
+        Task<ReservationDto> GetAReservationWithHisCustomer(int id);
         Task<ReservationDto> Add(ReservationDto model);
-        Task<bool> Edit(ReservationDto model);
-        Task<ReservationDto> Delete(int id);
+        Task<bool> EditAReservation(ReservationDto model);
+        Task<ReservationDto> Delete(ReservationDto model);
     }
 }

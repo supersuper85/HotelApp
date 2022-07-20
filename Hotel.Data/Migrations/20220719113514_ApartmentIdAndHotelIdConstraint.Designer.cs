@@ -4,6 +4,7 @@ using HotelApp.Data.Entities.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelApp.Data.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220719113514_ApartmentIdAndHotelIdConstraint")]
+    partial class ApartmentIdAndHotelIdConstraint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,8 +209,8 @@ namespace HotelApp.Data.Migrations
                             Id = 1,
                             ApartmentId = 2,
                             HotelId = 1,
-                            RegistrationDate = new DateTime(2022, 7, 20, 11, 3, 20, 908, DateTimeKind.Utc).AddTicks(4000),
-                            ReleaseDate = new DateTime(2022, 7, 21, 12, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegistrationDate = new DateTime(2022, 7, 19, 11, 35, 14, 433, DateTimeKind.Utc).AddTicks(4744),
+                            ReleaseDate = new DateTime(2022, 7, 20, 11, 35, 14, 433, DateTimeKind.Utc).AddTicks(4746)
                         });
                 });
 

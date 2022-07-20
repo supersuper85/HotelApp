@@ -2,7 +2,7 @@
 using HotelApp.BLL.Dto;
 using HotelApp.API.Models.ApartmentModels;
 
-namespace HotelApp.API.Mappers.ModelMappers
+namespace HotelApp.API.Mappers
 {
     public class ApartmentProfile : Profile
     {

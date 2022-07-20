@@ -4,6 +4,7 @@ using HotelApp.Data.Entities.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelApp.Data.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220718123909_ReservationDeleteBehavior2")]
+    partial class ReservationDeleteBehavior2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,8 +198,7 @@ namespace HotelApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HotelId", "ApartmentId")
-                        .IsUnique();
+                    b.HasIndex("HotelId");
 
                     b.ToTable("Reservation");
 
@@ -207,8 +208,8 @@ namespace HotelApp.Data.Migrations
                             Id = 1,
                             ApartmentId = 2,
                             HotelId = 1,
-                            RegistrationDate = new DateTime(2022, 7, 20, 11, 3, 20, 908, DateTimeKind.Utc).AddTicks(4000),
-                            ReleaseDate = new DateTime(2022, 7, 21, 12, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegistrationDate = new DateTime(2022, 7, 18, 12, 39, 9, 25, DateTimeKind.Utc).AddTicks(9546),
+                            ReleaseDate = new DateTime(2022, 7, 19, 12, 39, 9, 25, DateTimeKind.Utc).AddTicks(9548)
                         });
                 });
 
@@ -217,7 +218,7 @@ namespace HotelApp.Data.Migrations
                     b.HasOne("HotelApp.Data.Entities.Hotel", null)
                         .WithMany("Apartments")
                         .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -226,13 +227,13 @@ namespace HotelApp.Data.Migrations
                     b.HasOne("HotelApp.Data.Entities.Hotel", null)
                         .WithMany("Customers")
                         .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HotelApp.Data.Entities.Reservation", null)
                         .WithOne("Customer")
                         .HasForeignKey("HotelApp.Data.Entities.Customer", "ReservationId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -241,7 +242,7 @@ namespace HotelApp.Data.Migrations
                     b.HasOne("HotelApp.Data.Entities.Hotel", null)
                         .WithMany("Reservations")
                         .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

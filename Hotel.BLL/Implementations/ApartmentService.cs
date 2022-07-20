@@ -8,14 +8,14 @@ namespace HotelApp.BLL.Implementations
 {
     public class ApartmentService : IApartmentService
     {
-        private readonly IApartmentRepository<Apartment> _hotelRoomRepository;
+        private readonly IApartmentRepository<Apartment> _apartmentRepository;
         private readonly IRepository<Apartment> _defaultRepository;
         private readonly IMapper _mapper;
 
         public ApartmentService(IApartmentRepository<Apartment> hotelRoomRepository, IRepository<Apartment> defaultRepository,
             IMapper mapper)
         {
-            _hotelRoomRepository = hotelRoomRepository;
+            _apartmentRepository = hotelRoomRepository;
             _defaultRepository = defaultRepository;
             _mapper = mapper;
         }
@@ -69,7 +69,7 @@ namespace HotelApp.BLL.Implementations
 
         public async Task<IList<ApartmentDto>> GetAllAvailableHotelRooms()
         {
-            var apartments = await _hotelRoomRepository.GetAllAvailableApartments();
+            var apartments = await _apartmentRepository.GetAllAvailableApartments();
             return _mapper.Map<IList<ApartmentDto>>(apartments);
 
         }
