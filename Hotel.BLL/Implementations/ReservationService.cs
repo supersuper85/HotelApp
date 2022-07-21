@@ -57,6 +57,13 @@ namespace HotelApp.BLL.Implementations
             var mappedReservation = _mapper.Map<ReservationDto, Reservation>(model);
             var addedReservation = await _defaultReservationRepository.AddAsync(mappedReservation);
 
+            var reservedApartment = await _defaultApartmentRepository.SingleOrDefaultAsync(x => x.Id == model.ApartmentId);
+
+            reservedApartment.ReservationId = addedReservation.Id;
+            reservedApartment.CustomerId = addedReservation.Customer.Id;
+
+            await _defaultApartmentRepository.UpdateAsync(reservedApartment);
+
             return _mapper.Map<ReservationDto>(addedReservation);
 
         }
@@ -71,16 +78,23 @@ namespace HotelApp.BLL.Implementations
             reservation.ApartmentId = model.ApartmentId;
             reservation.ReleaseDate = model.ReleaseDate;
 
-            var reservedApartment = await _defaultApartmentRepository.SingleOrDefaultAsync(x => x.Id == model.ApartmentId);
+            var newReservedApartment = await _defaultApartmentRepository.SingleOrDefaultAsync(x => x.Id == model.ApartmentId);
 
-            reservedApartment.ReservationId = reservation.Id;
-            reservedApartment.CustomerId = reservation.Customer.Id;
+            newReservedApartment.ReservationId = reservation.Id;
+            newReservedApartment.CustomerId = reservation.Customer.Id;
+
+            var oldReservedApartment = await _defaultApartmentRepository.SingleOrDefaultAsync(x => x.Id == reservation.ApartmentId);
+
+            var foreignKeyNullValue = 0;
+            oldReservedApartment.ReservationId = foreignKeyNullValue;
+            oldReservedApartment.CustomerId = foreignKeyNullValue;
 
             var responseReservation = await _defaultReservationRepository.UpdateAsync(reservation);
             var responseCustomer = await _defaultCustomerRepository.UpdateAsync(reservation.Customer);
-            var responseApartment = await _defaultApartmentRepository.UpdateAsync(reservedApartment);
+            var responseNewApartment = await _defaultApartmentRepository.UpdateAsync(newReservedApartment);
+            var responseOldApartment = await _defaultApartmentRepository.UpdateAsync(oldReservedApartment);
 
-            return responseReservation && responseCustomer && responseApartment;
+            return responseReservation && responseCustomer && responseNewApartment && responseOldApartment;
         }
 
         public async Task<ReservationDto> Delete(int id)
@@ -102,7 +116,5 @@ namespace HotelApp.BLL.Implementations
 
             return deletingReservationResponse && deletingCustomerResponse && modifingApartmentResponse ? _mapper.Map<ReservationDto>(reservation) : null;
         }
-
-        
     }
 }

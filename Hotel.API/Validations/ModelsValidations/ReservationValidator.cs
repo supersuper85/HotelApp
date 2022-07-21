@@ -10,13 +10,14 @@ namespace HotelApp.API.Validations.ModelsValidations
             validator.CheckObjectIsntNull(model, nameof(model));
             validator.CheckObjectIsntNull(model.Customer, nameof(model.Customer));
 
-            validator.CheckIdIsntEqualOrLessThanZero(model.NumberOfDays, nameof(model.NumberOfDays));
-            validator.CheckIdIsntEqualOrLessThanZero(model.ApartmentId, nameof(model.ApartmentId));
-            validator.CheckIdIsntEqualOrLessThanZero(model.HotelId, nameof(model.HotelId));
+            validator.CheckIntIsntEqualOrLessThanZero(model.NumberOfDays, nameof(model.NumberOfDays));
+            validator.CheckIntIsntEqualOrLessThanZero(model.ApartmentId, nameof(model.ApartmentId));
+            validator.CheckIntIsntEqualOrLessThanZero(model.HotelId, nameof(model.HotelId));
 
             validator.CheckAge(model.Customer.Age);
 
-            validator.CheckNameIsValid(model.Customer.Name, nameof(model.Customer.Name));
+            validator.CheckNameHaveCorrectLength(model.Customer.Name, nameof(model.Customer.Name));
+            validator.CheckNoSpecialCharacters(model.Customer.Name, nameof(model.Customer.Name));
 
             validator.CheckPropertyHaveSpecificLength(model.Customer.CNP, 13, nameof(model.Customer.CNP));
 
@@ -27,10 +28,10 @@ namespace HotelApp.API.Validations.ModelsValidations
             var validator = new ModelsValidator();
             validator.CheckObjectIsntNull(model, nameof(model));
 
-            validator.CheckIdIsntEqualOrLessThanZero(model.ApartmentId, nameof(model.ApartmentId));
+            validator.CheckIntIsntEqualOrLessThanZero(model.ApartmentId, nameof(model.ApartmentId));
 
-            validator.CheckValidDateRelease(model.ReleaseDate, nameof(model.ReleaseDate));
-            
+            validator.CheckReleaseDateGreaterThanNow(model.ReleaseDate, nameof(model.ReleaseDate));
+            validator.CheckReleaseDateHaveCorrectReleaseHour(model.ReleaseDate, nameof(model.ReleaseDate));
         }
         public void CheckReservationDeleteModel(ReservationDeleteModel model)
         {
@@ -38,8 +39,8 @@ namespace HotelApp.API.Validations.ModelsValidations
             validator.CheckObjectIsntNull(model, nameof(model));
             validator.CheckObjectIsntNull(model.Customer, nameof(model.Customer));
 
-            validator.CheckIdIsntEqualOrLessThanZero(model.Id, nameof(model.Id));
-            validator.CheckIdIsntEqualOrLessThanZero(model.Customer.Id, nameof(model.Customer.Id));
+            validator.CheckIntIsntEqualOrLessThanZero(model.Id, nameof(model.Id));
+            validator.CheckIntIsntEqualOrLessThanZero(model.Customer.Id, nameof(model.Customer.Id));
         }
     }
 }

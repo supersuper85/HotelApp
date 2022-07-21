@@ -102,7 +102,7 @@ namespace HotelApp.BLL.Validations
         {
             if (model.ApartmentId == entity.ApartmentId && model.ReleaseDate == entity.ReleaseDate)
             {
-                throw new DatabaseValidatorException("No change was detected between the model entered and the one in the database.");
+                throw new DatabaseValidatorException("No change was detected between the model entered and the one from the database.");
             }
         }
 
