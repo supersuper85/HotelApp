@@ -82,28 +82,6 @@ namespace HotelApp.BLL.Validations
                 throw new DatabaseValidatorException("The introduced apartment is already rented!");
             }
         }
-        
-
-        public async Task CheckReservationDeleteModel(ReservationDto model, Reservation entity)
-        {
-            CheckObjectNotNull(entity);
-            CheckCorrelationsBetweenReservations(model, entity);
-        }
-        private void CheckObjectNotNull(Reservation entity)
-        {
-            if (entity == null)
-            { 
-                throw new DatabaseValidatorException("The reservation ID entered is invalid!");
-            }
-        }
-
-        private void CheckCorrelationsBetweenReservations(ReservationDto model, Reservation entity)
-        {
-            if(model.Customer.Id != entity.Customer.Id)
-            {
-                throw new DatabaseValidatorException("The customer ID entered is not in accordance with the customer ID from the database!");
-            }
-        }
 
         public async Task CheckReservationPutModel(ReservationDto model, Reservation entity)
         {
@@ -113,12 +91,24 @@ namespace HotelApp.BLL.Validations
             await CheckApartmentModified(model, entity);
            
         }
+        private void CheckObjectNotNull(Reservation entity)
+        {
+            if (entity == null)
+            {
+                throw new DatabaseValidatorException("The reservation ID entered is invalid!");
+            }
+        }
         private void CheckIfReservationWasModified(ReservationDto model, Reservation entity)
         {
             if (model.ApartmentId == entity.ApartmentId && model.ReleaseDate == entity.ReleaseDate)
             {
                 throw new DatabaseValidatorException("No change was detected between the model entered and the one in the database.");
             }
+        }
+
+        public async Task CheckReservationDeleteModel(Reservation entity)
+        {
+            CheckObjectNotNull(entity);
         }
     }
 }

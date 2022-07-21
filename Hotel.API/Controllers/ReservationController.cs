@@ -136,15 +136,14 @@ namespace HotelApp.API.Controllers
         }
 
         [HttpDelete("DeleteReservation")]
-        public async Task<IActionResult> DeleteReservation([FromBody] ReservationDeleteModel model)
+        public async Task<IActionResult> DeleteReservation([FromBody] IdModel model)
         {
             try
             {
-                var reservationValidator = new ReservationValidator();
-                reservationValidator.CheckReservationDeleteModel(model);
+                var reservationValidator = new IdModelValidator();
+                reservationValidator.CheckIdModel(model);
 
-                var mappedModel = _mapper.Map<ReservationDto>(model);
-                var result = await _reservationService.Delete(mappedModel);
+                var result = await _reservationService.Delete(model.Id);
                 if (result != null)
                 {
                     return Ok($"Reservation with id {result.Id} was deleted ");

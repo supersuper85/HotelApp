@@ -83,12 +83,12 @@ namespace HotelApp.BLL.Implementations
             return responseReservation && responseCustomer && responseApartment;
         }
 
-        public async Task<ReservationDto> Delete(ReservationDto model)
+        public async Task<ReservationDto> Delete(int id)
         {
-            var reservation = await _reservationRepository.GetAReservationWithHisCustomer(model.Id);
+            var reservation = await _reservationRepository.GetAReservationWithHisCustomer(id);
 
             var reservationValidator = new ReservationDatabaseValidator(_defaultReservationRepository);
-            await reservationValidator.CheckReservationDeleteModel(model, reservation);
+            await reservationValidator.CheckReservationDeleteModel(reservation);
 
             var reservedApartment = await _defaultApartmentRepository.SingleOrDefaultAsync(x => x.Id == reservation.ApartmentId);
 
