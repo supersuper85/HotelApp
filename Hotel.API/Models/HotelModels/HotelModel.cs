@@ -1,4 +1,9 @@
-﻿namespace HotelApp.API.Models
+﻿using HotelApp.API.Models.ApartmentModels;
+using HotelApp.API.Models.CustomerModels;
+using HotelApp.API.Models.ReservationModels;
+using System.ComponentModel.DataAnnotations;
+
+namespace HotelApp.API.Models.HotelModels
 {
     public class HotelModel
     {

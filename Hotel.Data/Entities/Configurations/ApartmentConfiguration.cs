@@ -21,26 +21,29 @@ namespace HotelApp.Data.Entities.Configurations
 
             builder.Property(x => x.HotelId).IsRequired();
 
-            builder.HasData(new Apartment
-            {
-                Id = 1,
-                DailyRentInEuro = 25,
-                NumberOfRooms = 2,
-                RoomNumber = 1,
+            builder.HasData(
+                new Apartment
+                {
+                    Id = 1,
+                    DailyRentInEuro = 25,
+                    NumberOfRooms = 2,
+                    RoomNumber = 1,
 
-                ReservationId = 0,
-                HotelId = 1,
-            });
-            builder.HasData(new Apartment
-            {
-                Id = 2,
-                DailyRentInEuro = 35,
-                NumberOfRooms = 3,
-                RoomNumber = 2,
+                    CustomerId = 0,
+                    ReservationId = 0,
+                    HotelId = 1,
+                },
+                new Apartment
+                {
+                    Id = 2,
+                    DailyRentInEuro = 35,
+                    NumberOfRooms = 3,
+                    RoomNumber = 2,
 
-                ReservationId = 1,
-                HotelId = 1,
-            });
+                    CustomerId = 1,
+                    ReservationId = 1,
+                    HotelId = 1,
+                });
         }
     }
 }

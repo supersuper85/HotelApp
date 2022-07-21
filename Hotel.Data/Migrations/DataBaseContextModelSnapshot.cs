@@ -71,7 +71,7 @@ namespace HotelApp.Data.Migrations
                         new
                         {
                             Id = 2,
-                            CustomerId = 0,
+                            CustomerId = 1,
                             DailyRentInEuro = 35f,
                             HotelId = 1,
                             NumberOfRooms = 3,
@@ -94,6 +94,11 @@ namespace HotelApp.Data.Migrations
                     b.Property<int>("ApartmentId")
                         .HasColumnType("int");
 
+                    b.Property<string>("CNP")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
+
                     b.Property<int>("HotelId")
                         .HasColumnType("int");
 
@@ -107,9 +112,13 @@ namespace HotelApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HotelId");
-
                     b.HasIndex("ReservationId")
+                        .IsUnique();
+
+                    b.HasIndex("ApartmentId", "HotelId")
+                        .IsUnique();
+
+                    b.HasIndex("HotelId", "CNP")
                         .IsUnique();
 
                     b.ToTable("Customer");
@@ -120,6 +129,7 @@ namespace HotelApp.Data.Migrations
                             Id = 1,
                             Age = 20,
                             ApartmentId = 2,
+                            CNP = "1234567891011",
                             HotelId = 1,
                             Name = "Cristi",
                             ReservationId = 1
@@ -156,6 +166,11 @@ namespace HotelApp.Data.Migrations
                         {
                             Id = 2,
                             Name = "Transilvania"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Roscu"
                         });
                 });
 
@@ -181,7 +196,8 @@ namespace HotelApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HotelId");
+                    b.HasIndex("HotelId", "ApartmentId")
+                        .IsUnique();
 
                     b.ToTable("Reservation");
 
@@ -191,8 +207,8 @@ namespace HotelApp.Data.Migrations
                             Id = 1,
                             ApartmentId = 2,
                             HotelId = 1,
-                            RegistrationDate = new DateTime(2022, 7, 14, 9, 13, 19, 218, DateTimeKind.Utc).AddTicks(2573),
-                            ReleaseDate = new DateTime(2022, 7, 15, 9, 13, 19, 218, DateTimeKind.Utc).AddTicks(2575)
+                            RegistrationDate = new DateTime(2022, 7, 20, 11, 3, 20, 908, DateTimeKind.Utc).AddTicks(4000),
+                            ReleaseDate = new DateTime(2022, 7, 21, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 

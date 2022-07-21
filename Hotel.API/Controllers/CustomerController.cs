@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace HotelApp.API.Controllers
 {
+    [ApiController]
     [Route(RouteConstants.RouteCustomer)]
     public class CustomerController : Controller
     {
@@ -26,23 +27,6 @@ namespace HotelApp.API.Controllers
             _mapper = mapper;
             _customerService = customerService;
             _logger = logger;
-        }
-
-        [HttpGet("getAll")]
-        public async Task<IActionResult> GetAll()
-        {
-            try
-            {
-                var result = await _customerService.GetAll();
-                var mappedResult = _mapper.Map<IList<CustomerModel>>(result);
-
-                return Ok(mappedResult);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message);
-                return BadRequest();
-            }
         }
     }
 }

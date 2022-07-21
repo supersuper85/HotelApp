@@ -13,6 +13,8 @@ namespace HotelApp.API.Extensions.ServiceCollection
                 cfg.AddProfile(new api.CustomerProfile());
                 cfg.AddProfile(new api.ApartmentProfile());
                 cfg.AddProfile(new api.ReservationProfile());
+                cfg.AddProfile(new api.HotelProfile());
+
                 cfg.AddProfile(new bll.CustomerProfile());
                 cfg.AddProfile(new bll.ApartmentProfile());
                 cfg.AddProfile(new bll.ReservationProfile());

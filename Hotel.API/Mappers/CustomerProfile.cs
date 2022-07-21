@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using HotelApp.BLL.Dto;
-using HotelApp.API.Models;
+using HotelApp.API.Models.CustomerModels;
 
 namespace HotelApp.API.Mappers
 {
@@ -9,6 +9,9 @@ namespace HotelApp.API.Mappers
         public CustomerProfile()
         {
             CreateMap<CustomerModel, CustomerDto>().ReverseMap();
+            CreateMap<CustomerPostModel, CustomerDto>().ReverseMap();
+            CreateMap<CustomerPutModel, CustomerDto>().ReverseMap();
+            CreateMap<CustomerDeleteModel, CustomerDto>().ReverseMap();
         }
     }
 }

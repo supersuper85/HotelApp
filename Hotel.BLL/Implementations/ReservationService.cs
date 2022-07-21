@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HotelApp.BLL.Dto;
 using HotelApp.BLL.Interfaces;
+using HotelApp.BLL.Validations;
 using HotelApp.Data.Entities;
 using HotelApp.Data.Interfaces;
 
@@ -8,63 +9,112 @@ namespace HotelApp.BLL.Implementations
 {
     public class ReservationService : IReservationService
     {
-        private readonly IRepository<Reservation> _repository;
+        private readonly IRepository<Reservation> _defaultReservationRepository;
+        private readonly IRepository<Customer> _defaultCustomerRepository;
+        private readonly IRepository<Apartment> _defaultApartmentRepository;
+        private readonly IRepository<Hotel> _defaultHotelRepository;
+        private readonly IReservationRepository<Reservation> _reservationRepository;
         private readonly IMapper _mapper;
 
-        public ReservationService(IRepository<Reservation> repository,
-            IMapper mapper)
+        public ReservationService(IRepository<Reservation> defaultReservationRepository, 
+         IReservationRepository<Reservation> reservationRepository, 
+         IRepository<Customer> defaultCustomerRepository,
+         IRepository<Apartment> defaultApartmentRepository,
+         IRepository<Hotel> defaultHotelRepository
+        , IMapper mapper)
         {
-            _repository = repository;
+            _defaultReservationRepository = defaultReservationRepository;
+            _defaultCustomerRepository = defaultCustomerRepository;
+            _defaultApartmentRepository = defaultApartmentRepository;
+            _defaultHotelRepository = defaultHotelRepository;
+            _reservationRepository = reservationRepository;
             _mapper = mapper;
         }
         public async Task<IList<ReservationDto>> GetAll()
         {
-            var entities = await _repository.GetAllAsync();
-            return _mapper.Map<IList<ReservationDto>>(entities);
+            var reservations = await _defaultReservationRepository.GetAllAsync();
+            return _mapper.Map<IList<ReservationDto>>(reservations);
         }
 
-        public async Task<ReservationDto> Get(int id)
+        public async Task<IList<ReservationDto>> GetAllReservationsWithTheirCustomers()
         {
-            var entities = await _repository.GetAllAsync();
-            var entityById = entities.SingleOrDefault(e => e.Id == id);
-            var mapped = _mapper.Map<ReservationDto>(entityById);
+            var reservations = await _reservationRepository.GetAllReservationsWithTheirCustomers();
+            return _mapper.Map<IList<ReservationDto>>(reservations);
+        }
 
-            return mapped;
+
+        public async Task<ReservationDto> GetAReservationWithHisCustomer(int id)
+        {
+            var reservation = await _reservationRepository.GetAReservationWithHisCustomer(id);
+            return _mapper.Map<ReservationDto>(reservation);
         }
 
         public async Task<ReservationDto> Add(ReservationDto model)
         {
-            //verify if borrower exists in database!!!
-            var mappedBook = _mapper.Map<ReservationDto, Reservation>(model);
-            var addedBook = await _repository.AddAsync(mappedBook);
+            var reservationValidator = new ReservationDatabaseValidator(_defaultReservationRepository, _defaultApartmentRepository, _defaultHotelRepository);
+            await reservationValidator.CheckReservationPostModel(model);
 
-            return _mapper.Map<ReservationDto>(addedBook);
+            var mappedReservation = _mapper.Map<ReservationDto, Reservation>(model);
+            var addedReservation = await _defaultReservationRepository.AddAsync(mappedReservation);
+
+            var reservedApartment = await _defaultApartmentRepository.SingleOrDefaultAsync(x => x.Id == model.ApartmentId);
+
+            reservedApartment.ReservationId = addedReservation.Id;
+            reservedApartment.CustomerId = addedReservation.Customer.Id;
+
+            await _defaultApartmentRepository.UpdateAsync(reservedApartment);
+
+            return _mapper.Map<ReservationDto>(addedReservation);
 
         }
-        public async Task<bool> Edit(ReservationDto model)
+        public async Task<bool> EditAReservation(ReservationDto model)
         {
-            if (await _repository.ExistsAsync(x => x.Id == model.Id))
-            {
-                var mappedBook = _mapper.Map<ReservationDto, Reservation>(model);
-                var response = await _repository.UpdateAsync(mappedBook);
+            var reservation = await _reservationRepository.GetAReservationWithHisCustomer(model.Id);
 
-                return response;
-            }
-            return false;
+            var reservationValidator = new ReservationDatabaseValidator(_defaultReservationRepository, _defaultApartmentRepository);
+            await reservationValidator.CheckReservationPutModel(model, reservation);
+
+            reservation.Customer.ApartmentId = model.ApartmentId;
+            reservation.ApartmentId = model.ApartmentId;
+            reservation.ReleaseDate = model.ReleaseDate;
+
+            var newReservedApartment = await _defaultApartmentRepository.SingleOrDefaultAsync(x => x.Id == model.ApartmentId);
+
+            newReservedApartment.ReservationId = reservation.Id;
+            newReservedApartment.CustomerId = reservation.Customer.Id;
+
+            var oldReservedApartment = await _defaultApartmentRepository.SingleOrDefaultAsync(x => x.Id == reservation.ApartmentId);
+
+            var foreignKeyNullValue = 0;
+            oldReservedApartment.ReservationId = foreignKeyNullValue;
+            oldReservedApartment.CustomerId = foreignKeyNullValue;
+
+            var responseReservation = await _defaultReservationRepository.UpdateAsync(reservation);
+            var responseCustomer = await _defaultCustomerRepository.UpdateAsync(reservation.Customer);
+            var responseNewApartment = await _defaultApartmentRepository.UpdateAsync(newReservedApartment);
+            var responseOldApartment = await _defaultApartmentRepository.UpdateAsync(oldReservedApartment);
+
+            return responseReservation && responseCustomer && responseNewApartment && responseOldApartment;
         }
 
         public async Task<ReservationDto> Delete(int id)
         {
-            if (await _repository.ExistsAsync(x => x.Id == id))
-            {
-                var book = await _repository.SingleOrDefaultAsync(x => x.Id == id);
+            var reservation = await _reservationRepository.GetAReservationWithHisCustomer(id);
 
-                var response = await _repository.DeleteAsync(book);
-                return response ? _mapper.Map<ReservationDto>(book) : null;
+            var reservationValidator = new ReservationDatabaseValidator(_defaultReservationRepository);
+            await reservationValidator.CheckReservationDeleteModel(reservation);
 
-            }
-            return null;
+            var reservedApartment = await _defaultApartmentRepository.SingleOrDefaultAsync(x => x.Id == reservation.ApartmentId);
+
+            var foreignKeyNullValue = 0;
+            reservedApartment.ReservationId = foreignKeyNullValue;
+            reservedApartment.CustomerId = foreignKeyNullValue;
+
+            var deletingCustomerResponse = await _defaultCustomerRepository.DeleteAsync(reservation.Customer);
+            var deletingReservationResponse = await _defaultReservationRepository.DeleteAsync(reservation);
+            var modifingApartmentResponse = await _defaultApartmentRepository.UpdateAsync(reservedApartment);
+
+            return deletingReservationResponse && deletingCustomerResponse && modifingApartmentResponse ? _mapper.Map<ReservationDto>(reservation) : null;
         }
-
     }
 }

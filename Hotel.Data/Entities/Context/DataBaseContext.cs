@@ -22,6 +22,7 @@ namespace HotelApp.Data.Entities.Context
 
                 optionsBuilder.UseSqlServer(
                     @"Server=.\SQLEXPRESS;Database=HotelDatabase;Trusted_Connection=True;");
+                optionsBuilder.EnableSensitiveDataLogging();
             }
         }
 
