@@ -11,9 +11,9 @@ namespace HotelApp.API.Validations
                 throw new ModelValidationException("The age cannot be less than 18 years old!");
             }
         }
-        public void CheckIdIsntZero(int id, string propertyName)
+        public void CheckIdIsntEqualOrLessThanZero(int id, string propertyName)
         {
-            if (id == 0)
+            if (id <= 0)
             {
                 throw new ModelValidationException($"The {propertyName} property cannot have a value of 0!");
             }

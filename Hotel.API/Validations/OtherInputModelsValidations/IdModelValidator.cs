@@ -9,7 +9,7 @@ namespace HotelApp.API.Validations.OtherInputModelsValidations
             var validator = new ModelsValidator();
             validator.CheckObjectIsntNull(model, nameof(model));
 
-            validator.CheckIdIsntZero(model.Id, nameof(model.Id));
+            validator.CheckIdIsntEqualOrLessThanZero(model.Id, nameof(model.Id));
         }
     }
 }

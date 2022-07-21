@@ -10,9 +10,9 @@ namespace HotelApp.API.Validations.ModelsValidations
             validator.CheckObjectIsntNull(model, nameof(model));
             validator.CheckObjectIsntNull(model.Customer, nameof(model.Customer));
 
-            validator.CheckIdIsntZero(model.NumberOfDays, nameof(model.NumberOfDays));
-            validator.CheckIdIsntZero(model.ApartmentId, nameof(model.ApartmentId));
-            validator.CheckIdIsntZero(model.HotelId, nameof(model.HotelId));
+            validator.CheckIdIsntEqualOrLessThanZero(model.NumberOfDays, nameof(model.NumberOfDays));
+            validator.CheckIdIsntEqualOrLessThanZero(model.ApartmentId, nameof(model.ApartmentId));
+            validator.CheckIdIsntEqualOrLessThanZero(model.HotelId, nameof(model.HotelId));
 
             validator.CheckAge(model.Customer.Age);
 
@@ -27,7 +27,7 @@ namespace HotelApp.API.Validations.ModelsValidations
             var validator = new ModelsValidator();
             validator.CheckObjectIsntNull(model, nameof(model));
 
-            validator.CheckIdIsntZero(model.ApartmentId, nameof(model.ApartmentId));
+            validator.CheckIdIsntEqualOrLessThanZero(model.ApartmentId, nameof(model.ApartmentId));
 
             validator.CheckValidDateRelease(model.ReleaseDate, nameof(model.ReleaseDate));
             
@@ -38,8 +38,8 @@ namespace HotelApp.API.Validations.ModelsValidations
             validator.CheckObjectIsntNull(model, nameof(model));
             validator.CheckObjectIsntNull(model.Customer, nameof(model.Customer));
 
-            validator.CheckIdIsntZero(model.Id, nameof(model.Id));
-            validator.CheckIdIsntZero(model.Customer.Id, nameof(model.Customer.Id));
+            validator.CheckIdIsntEqualOrLessThanZero(model.Id, nameof(model.Id));
+            validator.CheckIdIsntEqualOrLessThanZero(model.Customer.Id, nameof(model.Customer.Id));
         }
     }
 }
