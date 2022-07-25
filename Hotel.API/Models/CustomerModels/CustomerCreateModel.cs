@@ -2,7 +2,7 @@
 
 namespace HotelApp.API.Models.CustomerModels
 {
-    public class CustomerPostModel
+    public class CustomerCreateModel
     {
         public int Age { get; set; }
         public string Name { get; set; }

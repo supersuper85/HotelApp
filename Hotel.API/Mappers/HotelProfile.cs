@@ -9,7 +9,7 @@ namespace HotelApp.API.Mappers
         public HotelProfile()
         {
             CreateMap<HotelModel, HotelDto>().ReverseMap();
-            CreateMap<HotelPostModel, HotelDto>().ReverseMap();
+            CreateMap<HotelCreateModel, HotelDto>().ReverseMap();
         }
     }
 }

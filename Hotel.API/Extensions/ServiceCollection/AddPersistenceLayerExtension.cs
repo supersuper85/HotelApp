@@ -14,16 +14,13 @@ namespace HotelApp.API.Extensions.ServiceCollection
                 options.UseSqlServer(configuration["ConnectionStrings:HotelConnection"]));
 
             //Custom interface for apartment
-            services.AddTransient<IApartmentRepository<Apartment>, ApartmentRepository<Apartment>>();
+            services.AddTransient<IApartmentRepository, ApartmentRepository>();
+            //Custom interface for customer
+            services.AddTransient<ICustomerRepository, CustomerRepository>();
             //Custom interface for reservation
-            services.AddTransient<IReservationRepository<Reservation>, ReservationRepository<Reservation>>();
+            services.AddTransient<IReservationRepository, ReservationRepository>();
 
-            services.AddTransient<IRepository<Apartment>, BaseEntityFrameworkRepository<Apartment>>();
-            services.AddTransient<IRepository<Customer>, BaseEntityFrameworkRepository<Customer>>();
-            services.AddTransient<IRepository<Reservation>, BaseEntityFrameworkRepository<Reservation>>();
             services.AddTransient<IRepository<Hotel>, BaseEntityFrameworkRepository<Hotel>>();
-
-            
         }
     }
 }

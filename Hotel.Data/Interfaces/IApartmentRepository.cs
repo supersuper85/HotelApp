@@ -1,9 +1,10 @@
-﻿using System.Linq.Expressions;
+﻿using HotelApp.Data.Entities;
+using System.Linq.Expressions;
 
 namespace HotelApp.Data.Interfaces
 {
-    public interface IApartmentRepository<T> where T : class
+    public interface IApartmentRepository : IRepository<Apartment>
     {
-        Task<IList<T>> GetAllAvailableApartments(CancellationToken cancellationToken = default(CancellationToken));
+        Task<IList<Apartment>> GetAllAvailableApartments(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

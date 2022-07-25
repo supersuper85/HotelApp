@@ -10,7 +10,7 @@ namespace HotelApp.API.Mappers
         {
             CreateMap<ReservationModel, ReservationDto>().ReverseMap();
 
-            CreateMap<ReservationPostModel, ReservationDto>()
+            CreateMap<ReservationCreateModel, ReservationDto>()
                 .AfterMap((src, dest) =>
                 {
                     dest.Customer.HotelId = src.HotelId;
@@ -20,7 +20,7 @@ namespace HotelApp.API.Mappers
                     dest.ReleaseDate = GetReleaseDate(src.NumberOfDays);
                 });
 
-            CreateMap<ReservationPutModel, ReservationDto>()
+            CreateMap<ReservationEditModel, ReservationDto>()
                 .AfterMap((src, dest) =>
                 {
                     dest.Customer = new CustomerDto();

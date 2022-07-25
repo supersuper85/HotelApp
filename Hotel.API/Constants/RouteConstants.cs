@@ -3,7 +3,8 @@
     public class RouteConstants
     {
         public const string RouteBase = "/Api";
-        public const string RouteCustomer = "Customer";
-        public const string RouteHotelRoom = "HotelRoom";
+        public const string RouteCustomer = "/Api/Customer";
+        public const string RouteApartment = "/Api/Apartment";
+        public const string RouteReservation = "/Api/Reservation";
     }
 }

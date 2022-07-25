@@ -4,7 +4,7 @@ namespace HotelApp.API.Validations.ModelsValidations
 {
     public class ReservationValidator
     {
-        public void CheckReservationPostModel(ReservationPostModel model)
+        public void CheckReservationPostModel(ReservationCreateModel model)
         {
             var validator = new ModelsValidator();
             validator.CheckObjectIsntNull(model, nameof(model));
@@ -23,7 +23,7 @@ namespace HotelApp.API.Validations.ModelsValidations
 
             validator.CheckIsDigitsOnly(model.Customer.CNP, nameof(model.Customer.CNP));
         }
-        public void CheckReservationPutModel(ReservationPutModel model)
+        public void CheckReservationPutModel(ReservationEditModel model)
         {
             var validator = new ModelsValidator();
             validator.CheckObjectIsntNull(model, nameof(model));
@@ -37,10 +37,8 @@ namespace HotelApp.API.Validations.ModelsValidations
         {
             var validator = new ModelsValidator();
             validator.CheckObjectIsntNull(model, nameof(model));
-            validator.CheckObjectIsntNull(model.Customer, nameof(model.Customer));
 
             validator.CheckIntIsntEqualOrLessThanZero(model.Id, nameof(model.Id));
-            validator.CheckIntIsntEqualOrLessThanZero(model.Customer.Id, nameof(model.Customer.Id));
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace HotelApp.API.Models.ReservationModels
 {
-    public class ReservationPutModel
+    public class ReservationEditModel
     {
         public int Id { get; set; }
         public DateTime ReleaseDate { get; set; }

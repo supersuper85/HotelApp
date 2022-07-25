@@ -8,25 +8,24 @@ namespace HotelApp.BLL.Implementations
 {
     public class CustomerService : ICustomerService
     {
-        private readonly IRepository<Customer> _repository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IMapper _mapper;
 
-        public CustomerService(IRepository<Customer> repository,
+        public CustomerService(ICustomerRepository customerRepository,
             IMapper mapper)
         {
-            _repository = repository;
+            _customerRepository = customerRepository;
             _mapper = mapper;
         }
         public async Task<IList<CustomerDto>> GetAll()
         {
-            var customers = await _repository.GetAllAsync();
+            var customers = await _customerRepository.GetAllAsync();
             return _mapper.Map<IList<CustomerDto>>(customers);
         }
 
         public async Task<CustomerDto> Get(int id)
         {
-            var customers = await _repository.GetAllAsync();
-            var customerById = customers.SingleOrDefault(e => e.Id == id);
+            var customerById = await _customerRepository.GetCustomerById(id);
             var mappedCustomer = _mapper.Map<CustomerDto>(customerById);
 
             return mappedCustomer;
@@ -35,17 +34,17 @@ namespace HotelApp.BLL.Implementations
         public async Task<CustomerDto> Add(CustomerDto model)
         {
             var mappedCustomer = _mapper.Map<CustomerDto, Customer>(model);
-            var addedCustomer = await _repository.AddAsync(mappedCustomer);
+            var addedCustomer = await _customerRepository.AddAsync(mappedCustomer);
 
             return _mapper.Map<CustomerDto>(addedCustomer);
 
         }
         public async Task<bool> Edit(CustomerDto model)
         {
-            if (await _repository.ExistsAsync(x => x.Id == model.Id))
+            if (await _customerRepository.ExistsAsync(x => x.Id == model.Id))
             {
                 var mappedCustomer = _mapper.Map<CustomerDto, Customer>(model);
-                var response = await _repository.UpdateAsync(mappedCustomer);
+                var response = await _customerRepository.UpdateAsync(mappedCustomer);
 
                 return response;
             }
@@ -54,11 +53,11 @@ namespace HotelApp.BLL.Implementations
 
         public async Task<CustomerDto> Delete(int id)
         {
-            if (await _repository.ExistsAsync(x => x.Id == id))
+            if (await _customerRepository.ExistsAsync(x => x.Id == id))
             {
-                var customer = await _repository.SingleOrDefaultAsync(x => x.Id == id);
+                var customer = await _customerRepository.SingleOrDefaultAsync(x => x.Id == id);
 
-                var response = await _repository.DeleteAsync(customer);
+                var response = await _customerRepository.DeleteAsync(customer);
                 return response ? _mapper.Map<CustomerDto>(customer) : null;
 
             }
