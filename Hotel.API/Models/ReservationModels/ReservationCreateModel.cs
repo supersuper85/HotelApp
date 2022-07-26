@@ -8,6 +8,6 @@ namespace HotelApp.API.Models.ReservationModels
         public int NumberOfDays { get; set; }
         public int ApartmentId { get; set; }
         public int HotelId { get; set; }
-        public CustomerCreateModel Customer { get; set; }
+        public ReservationCustomerCreateModel Customer { get; set; }
     }
 }

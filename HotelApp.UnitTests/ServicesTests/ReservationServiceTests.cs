@@ -58,13 +58,15 @@ namespace HotelApp.UnitTests.ServicesTests
         
 
         [Fact]
-        public async Task AddReservationWithIncludedCustomer_ShouldReturnReservation()
+        public async Task AddReservation_ShouldReturnReservation()
         {
             //Arrange
             var databaseReservation = GenerateDatabaseReservationMockData();
 
             var apartmentId = 1;
             var databaseApartment = GenerateDatabaseApartmentMockData(apartmentId);
+
+            var databaseCustomer = new Customer { Name = "nuj" };
 
             var inputReservation = GenerateReservationDtoMockData();
             var outputReservation = GenerateReservationDtoMockData();
@@ -79,17 +81,23 @@ namespace HotelApp.UnitTests.ServicesTests
             _apartmentRepoMock.Setup(x => x.ExistsAsync(x => x.Id == inputReservation.ApartmentId, CancellationToken.None)).ReturnsAsync(true);
             _apartmentRepoMock.Setup(x => x.ExistsAsync(x => x.Id == inputReservation.HotelId, CancellationToken.None)).ReturnsAsync(true);
 
-            _reservationRepoMock.Setup(x => x.ExistsAsync(x => x.Customer.CNP == inputReservation.Customer.CNP, CancellationToken.None)).ReturnsAsync(false);
-            _reservationRepoMock.Setup(x => x.ExistsAsync(x => x.HotelId == inputReservation.HotelId, CancellationToken.None)).ReturnsAsync(false);
 
-            _reservationRepoMock.Setup(x => x.ExistsAsync(x => x.ApartmentId == inputReservation.ApartmentId, CancellationToken.None)).ReturnsAsync(false);
+            _reservationRepoMock.Setup(x => x.ExistsAsync(x => x.CustomerId == inputReservation.CustomerId && x.HotelId == inputReservation.HotelId, CancellationToken.None)).ReturnsAsync(false);
 
-            
+
+            _reservationRepoMock.Setup(x => x.ExistsAsync(x => x.ApartmentId == inputReservation.ApartmentId && x.HotelId == inputReservation.HotelId, CancellationToken.None)).ReturnsAsync(false);
+
+            _customerRepoMock.Setup(x => x.ExistsAsync(x => x.Id == inputReservation.Customer.Id, CancellationToken.None)).ReturnsAsync(true);
+
 
             _reservationRepoMock.Setup(x => x.AddAsync(databaseReservation, CancellationToken.None)).ReturnsAsync(databaseReservation);
 
             _apartmentRepoMock.Setup(x => x.SingleOrDefaultAsync(x => x.Id == inputReservation.ApartmentId, CancellationToken.None)).ReturnsAsync(databaseApartment);
             _apartmentRepoMock.Setup(x => x.UpdateAsync(databaseApartment , CancellationToken.None)).ReturnsAsync(true);
+
+            var customerId = 1;
+            _customerRepoMock.Setup(x => x.SingleOrDefaultAsync(x => x.Id == customerId, CancellationToken.None)).ReturnsAsync(databaseCustomer);
+            _customerRepoMock.Setup(x => x.UpdateAsync(It.IsAny<Customer>(), CancellationToken.None)).ReturnsAsync(true);
 
 
             //Act
@@ -157,7 +165,7 @@ namespace HotelApp.UnitTests.ServicesTests
 
 
             _reservationRepoMock.Setup(x => x.UpdateAsync(databaseReservation, CancellationToken.None)).ReturnsAsync(true);
-            _customerRepoMock.Setup(x => x.UpdateAsync(databaseReservation.Customer, CancellationToken.None)).ReturnsAsync(true);
+
             _apartmentRepoMock.Setup(x => x.UpdateAsync(newDatabaseApartment, CancellationToken.None)).ReturnsAsync(true);
             _apartmentRepoMock.Setup(x => x.UpdateAsync(oldDatabaseApartment, CancellationToken.None)).ReturnsAsync(true);
 
@@ -187,7 +195,6 @@ namespace HotelApp.UnitTests.ServicesTests
             _apartmentRepoMock.Setup(x => x.SingleOrDefaultAsync(x => x.Id == databaseReservation.ApartmentId, CancellationToken.None)).ReturnsAsync(databaseApartment);
 
 
-            _customerRepoMock.Setup(x => x.DeleteAsync(databaseReservation.Customer, CancellationToken.None)).ReturnsAsync(true);
             _reservationRepoMock.Setup(x => x.DeleteAsync(databaseReservation, CancellationToken.None)).ReturnsAsync(true);
             _apartmentRepoMock.Setup(x => x.UpdateAsync(databaseApartment, CancellationToken.None)).ReturnsAsync(true);
 

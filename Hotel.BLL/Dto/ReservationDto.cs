@@ -15,5 +15,7 @@ namespace HotelApp.BLL.Dto
         public int ApartmentId { get; set; }
         public CustomerDto Customer { get; set; }
         public int HotelId { get; set; }
+
+        public int CustomerId { get; set; }
     }
 }

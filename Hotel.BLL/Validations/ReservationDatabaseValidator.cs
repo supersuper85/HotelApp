@@ -2,11 +2,6 @@
 using HotelApp.BLL.Exceptions;
 using HotelApp.Data.Entities;
 using HotelApp.Data.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HotelApp.BLL.Validations
 {
@@ -15,21 +10,14 @@ namespace HotelApp.BLL.Validations
         private readonly IReservationRepository _reservationRepository;
         private readonly IApartmentRepository _apartmentRepository;
         private readonly IRepository<Hotel> _hotelRepository;
+        private readonly ICustomerRepository _customerRepository;
 
-        public ReservationDatabaseValidator(IReservationRepository reservationRepository, IApartmentRepository apartmentRepository, IRepository<Hotel> hotelRepository)
+        public ReservationDatabaseValidator(IReservationRepository reservationRepository, ICustomerRepository customerRepository, IApartmentRepository apartmentRepository, IRepository<Hotel> hotelRepository)
         {
             _reservationRepository = reservationRepository;
             _apartmentRepository = apartmentRepository;
             _hotelRepository = hotelRepository;
-        }
-        public ReservationDatabaseValidator(IReservationRepository reservationRepository, IApartmentRepository apartmentRepository)
-        {
-            _reservationRepository = reservationRepository;
-            _apartmentRepository = apartmentRepository;
-        }
-        public ReservationDatabaseValidator(IReservationRepository reservationRepository)
-        {
-            _reservationRepository = reservationRepository;
+            _customerRepository = customerRepository;
         }
         public async Task CheckReservationPostModel(ReservationDto model)
         {
@@ -37,6 +25,7 @@ namespace HotelApp.BLL.Validations
             await CheckHotelExists(model);
             await CheckCustomerAlreadyHaveRoomInHotel(model);
             await CheckApartmentAlreadyRent(model);
+            await CheckCustomerExists(model);
         }
         private async Task CheckApartmentExists(ReservationDto model)
         {
@@ -56,30 +45,40 @@ namespace HotelApp.BLL.Validations
         private async Task CheckCustomerAlreadyHaveRoomInHotel(ReservationDto model)
         {
 
-            if (await _reservationRepository.ExistsAsync(x => x.Customer.CNP == model.Customer.CNP) && await _reservationRepository.ExistsAsync(x => x.HotelId == model.HotelId))
+            if (await _reservationRepository.ExistsAsync(x => x.CustomerId == model.CustomerId && x.HotelId == model.HotelId))
             {
-                throw new DatabaseValidatorException("Someone with this CNP already owns an apartment in this hotel!");
+                throw new DatabaseValidatorException("This CustomerId already owns an apartment in this hotel!");
             }
         }
         private async Task CheckApartmentModified(ReservationDto model, Reservation entity)
         {
             if (entity.ApartmentId != model.ApartmentId)
             {
-                await CheckApartmentAlreadyRent(model, entity);
+                await CheckApartmentAlreadyRentWithoutHotelId(model, entity);
             }
         }
-        private async Task CheckApartmentAlreadyRent(ReservationDto model, Reservation entity)
+        private async Task CheckApartmentAlreadyRentWithoutHotelId(ReservationDto model, Reservation entity)
         {
-            if (await _reservationRepository.ExistsAsync(x => x.ApartmentId == model.ApartmentId) && await _reservationRepository.ExistsAsync(x => x.HotelId == entity.HotelId))
+            if (await _reservationRepository.ExistsAsync(x => x.ApartmentId == model.ApartmentId && x.HotelId == entity.HotelId))
             {
                 throw new DatabaseValidatorException("The introduced apartment is already rented!");
             }
         }
+
+
         private async Task CheckApartmentAlreadyRent(ReservationDto model)
         {
-            if (await _reservationRepository.ExistsAsync(x => x.ApartmentId == model.ApartmentId) && await _reservationRepository.ExistsAsync(x => x.HotelId == model.HotelId))
+            if (await _reservationRepository.ExistsAsync(x => x.ApartmentId == model.ApartmentId && x.HotelId == model.HotelId))
             {
                 throw new DatabaseValidatorException("The introduced apartment is already rented!");
+            }
+        }
+        private async Task CheckCustomerExists(ReservationDto model)
+        {
+
+            if (!await _customerRepository.ExistsAsync(x => x.Id == model.Customer.Id))
+            {
+                throw new DatabaseValidatorException("The entered customer ID is not valid!");
             }
         }
 
@@ -88,7 +87,7 @@ namespace HotelApp.BLL.Validations
             CheckObjectNotNull(entity);
             CheckIfReservationWasModified(model, entity);
             await CheckApartmentExists(model);
-            CheckApartmentModified(model, entity);
+            await CheckApartmentModified(model, entity);
            
         }
         private void CheckObjectNotNull(Reservation entity)

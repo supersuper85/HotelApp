@@ -17,13 +17,7 @@ namespace HotelApp.Data.Entities.Configurations
             builder.Property(x => x.CNP).HasMaxLength(13);
 
             builder.Property(x => x.Age).IsRequired();
-
-            builder.Property(x => x.ApartmentId).IsRequired();
-
-            builder.Property(x => x.ReservationId).IsRequired();
-
-            builder.HasIndex(x => new { x.ApartmentId, x.HotelId }).IsUnique();
-            builder.HasIndex(x => new { x.HotelId, x.CNP, }).IsUnique();
+     
 
             builder.HasData(new Customer
             {
@@ -32,9 +26,6 @@ namespace HotelApp.Data.Entities.Configurations
                 Name = "Cristi",
                 CNP = "1234567891011",
 
-                ApartmentId = 2,
-                ReservationId = 1,
-                HotelId = 1
             });
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+
 namespace HotelApp.Data.Entities.Configurations
 {
     public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
@@ -16,8 +17,8 @@ namespace HotelApp.Data.Entities.Configurations
 
             builder.Property(x => x.HotelId).IsRequired();
 
-            builder.HasOne(x => x.Customer).WithOne().HasForeignKey<Customer>(x => x.ReservationId);
             builder.HasIndex(x => new { x.HotelId, x.ApartmentId }).IsUnique();
+
 
             builder.HasData(new Reservation
             {
@@ -27,7 +28,9 @@ namespace HotelApp.Data.Entities.Configurations
 
                 ApartmentId = 2,
                 HotelId = 1,
-            });
+
+                CustomerId = 1,
+            }) ;
         }
         public DateTime GetReleaseDate(int numberOfDays)
         {

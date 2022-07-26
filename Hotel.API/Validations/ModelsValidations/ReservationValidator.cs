@@ -14,14 +14,7 @@ namespace HotelApp.API.Validations.ModelsValidations
             validator.CheckIntIsntEqualOrLessThanZero(model.ApartmentId, nameof(model.ApartmentId));
             validator.CheckIntIsntEqualOrLessThanZero(model.HotelId, nameof(model.HotelId));
 
-            validator.CheckAge(model.Customer.Age);
-
-            validator.CheckNameHaveCorrectLength(model.Customer.Name, nameof(model.Customer.Name));
-            validator.CheckNoSpecialCharacters(model.Customer.Name, nameof(model.Customer.Name));
-
-            validator.CheckPropertyHaveSpecificLength(model.Customer.CNP, 13, nameof(model.Customer.CNP));
-
-            validator.CheckIsDigitsOnly(model.Customer.CNP, nameof(model.Customer.CNP));
+            validator.CheckIntIsntEqualOrLessThanZero(model.Customer.Id, nameof(model.Customer.Id));
         }
         public void CheckReservationPutModel(ReservationEditModel model)
         {

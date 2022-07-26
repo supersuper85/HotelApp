@@ -9,5 +9,7 @@
         public int ApartmentId { get; set; }
         public Customer Customer { get; set; }
         public int HotelId { get; set; }
+
+        public int CustomerId  { get; set; }
     }
 }

@@ -53,30 +53,43 @@ namespace HotelApp.BLL.Implementations
 
         public async Task<ReservationDto> Add(ReservationDto model)
         {
-            var reservationValidator = new ReservationDatabaseValidator(_reservationRepository, _apartmentRepository, _hotelRepository);
+            var reservationValidator = new ReservationDatabaseValidator(_reservationRepository, _customerRepository, _apartmentRepository, _hotelRepository);
             await reservationValidator.CheckReservationPostModel(model);
 
             var mappedReservation = _mapper.Map<ReservationDto, Reservation>(model);
+
+            var customerId = model.Customer.Id;
+            mappedReservation.Customer = null;
+
             var addedReservation = await _reservationRepository.AddAsync(mappedReservation);
+
 
             var reservedApartment = await _apartmentRepository.SingleOrDefaultAsync(x => x.Id == model.ApartmentId);
 
             reservedApartment.ReservationId = addedReservation.Id;
-            reservedApartment.CustomerId = addedReservation.Customer.Id;
+            reservedApartment.CustomerId = customerId;
 
-            await _apartmentRepository.UpdateAsync(reservedApartment);
+            var modifingApartmentResponse = await _apartmentRepository.UpdateAsync(reservedApartment);
 
-            return _mapper.Map<ReservationDto>(addedReservation);
+
+            var customer = await _customerRepository.SingleOrDefaultAsync(x => x.Id == customerId);
+
+/*            customer.ApartmentId = model.ApartmentId;
+            customer.HotelId = model.HotelId;
+            customer.ReservationId = addedReservation.Id;*/
+
+            var modifingCustomerResponse = await _customerRepository.UpdateAsync(customer);
+
+            return modifingApartmentResponse && modifingCustomerResponse ? _mapper.Map<ReservationDto>(addedReservation) : null;
 
         }
         public async Task<bool> EditAReservation(ReservationDto model)
         {
             var reservation = await _reservationRepository.GetReservationById(model.Id);
 
-            var reservationValidator = new ReservationDatabaseValidator(_reservationRepository, _apartmentRepository);
+            var reservationValidator = new ReservationDatabaseValidator(_reservationRepository, _customerRepository, _apartmentRepository, _hotelRepository);
             await reservationValidator.CheckReservationPutModel(model, reservation);
 
-            reservation.Customer.ApartmentId = model.ApartmentId;
             reservation.ApartmentId = model.ApartmentId;
             reservation.ReleaseDate = model.ReleaseDate;
 
@@ -92,18 +105,17 @@ namespace HotelApp.BLL.Implementations
             oldReservedApartment.CustomerId = foreignKeyNullValue;
 
             var responseReservation = await _reservationRepository.UpdateAsync(reservation);
-            var responseCustomer = await _customerRepository.UpdateAsync(reservation.Customer);
             var responseNewApartment = await _apartmentRepository.UpdateAsync(newReservedApartment);
             var responseOldApartment = await _apartmentRepository.UpdateAsync(oldReservedApartment);
 
-            return responseReservation && responseCustomer && responseNewApartment && responseOldApartment;
+            return responseReservation && responseNewApartment && responseOldApartment;
         }
 
         public async Task<ReservationDto> Delete(int id)
         {
             var reservation = await _reservationRepository.GetReservationById(id);
 
-            var reservationValidator = new ReservationDatabaseValidator(_reservationRepository);
+            var reservationValidator = new ReservationDatabaseValidator(_reservationRepository, _customerRepository, _apartmentRepository, _hotelRepository);
             await reservationValidator.CheckReservationDeleteModel(reservation);
 
             var reservedApartment = await _apartmentRepository.SingleOrDefaultAsync(x => x.Id == reservation.ApartmentId);
@@ -112,11 +124,11 @@ namespace HotelApp.BLL.Implementations
             reservedApartment.ReservationId = foreignKeyNullValue;
             reservedApartment.CustomerId = foreignKeyNullValue;
 
-            var deletingCustomerResponse = await _customerRepository.DeleteAsync(reservation.Customer);
+
             var deletingReservationResponse = await _reservationRepository.DeleteAsync(reservation);
             var modifingApartmentResponse = await _apartmentRepository.UpdateAsync(reservedApartment);
 
-            return deletingReservationResponse && deletingCustomerResponse && modifingApartmentResponse ? _mapper.Map<ReservationDto>(reservation) : null;
+            return deletingReservationResponse && modifingApartmentResponse ? _mapper.Map<ReservationDto>(reservation) : null;
         }
     }
 }
