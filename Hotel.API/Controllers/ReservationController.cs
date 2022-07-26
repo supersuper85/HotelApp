@@ -3,6 +3,7 @@ using HotelApp.API.Constants;
 using HotelApp.API.Exceptions;
 using HotelApp.API.Models.ReservationModels;
 using HotelApp.API.Validations.ModelsValidations;
+using HotelApp.API.Validations;
 using HotelApp.BLL.Dto;
 using HotelApp.BLL.Exceptions;
 using HotelApp.BLL.Interfaces;

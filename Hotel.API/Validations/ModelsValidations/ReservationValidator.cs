@@ -30,8 +30,10 @@ namespace HotelApp.API.Validations.ModelsValidations
         {
             var validator = new ModelsValidator();
             validator.CheckObjectIsntNull(model, nameof(model));
+            validator.CheckObjectIsntNull(model.Customer, nameof(model.Customer));
 
             validator.CheckIntIsntEqualOrLessThanZero(model.Id, nameof(model.Id));
+            validator.CheckIntIsntEqualOrLessThanZero(model.Customer.Id, nameof(model.Customer.Id));
         }
     }
 }

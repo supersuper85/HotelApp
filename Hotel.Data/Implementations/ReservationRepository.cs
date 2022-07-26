@@ -8,8 +8,13 @@ namespace HotelApp.Data.Implementations
 {
     public class ReservationRepository :  BaseEntityFrameworkRepository<Reservation>, IReservationRepository
     {
+        protected readonly DbSet<T> _entities;
+        protected readonly DataBaseContext Context;
+
         public ReservationRepository(DataBaseContext context) : base(context)
         {
+            Context = context;
+            _entities = context.Set<T>();
         }
 
         public async Task<IList<Reservation>> GetAllReservations()

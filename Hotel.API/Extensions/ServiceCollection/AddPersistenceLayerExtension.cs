@@ -21,6 +21,8 @@ namespace HotelApp.API.Extensions.ServiceCollection
             services.AddTransient<IReservationRepository, ReservationRepository>();
 
             services.AddTransient<IRepository<Hotel>, BaseEntityFrameworkRepository<Hotel>>();
+
+            
         }
     }
 }
