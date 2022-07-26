@@ -91,15 +91,12 @@ namespace HotelApp.Data.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<int>("ApartmentId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CNP")
                         .IsRequired()
                         .HasMaxLength(13)
                         .HasColumnType("nvarchar(13)");
 
-                    b.Property<int>("HotelId")
+                    b.Property<int?>("HotelId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -107,19 +104,9 @@ namespace HotelApp.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("ReservationId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ReservationId")
-                        .IsUnique();
-
-                    b.HasIndex("ApartmentId", "HotelId")
-                        .IsUnique();
-
-                    b.HasIndex("HotelId", "CNP")
-                        .IsUnique();
+                    b.HasIndex("HotelId");
 
                     b.ToTable("Customer");
 
@@ -128,11 +115,8 @@ namespace HotelApp.Data.Migrations
                         {
                             Id = 1,
                             Age = 20,
-                            ApartmentId = 2,
                             CNP = "1234567891011",
-                            HotelId = 1,
-                            Name = "Cristi",
-                            ReservationId = 1
+                            Name = "Cristi"
                         });
                 });
 
@@ -185,6 +169,9 @@ namespace HotelApp.Data.Migrations
                     b.Property<int>("ApartmentId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<int>("HotelId")
                         .HasColumnType("int");
 
@@ -196,6 +183,8 @@ namespace HotelApp.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CustomerId");
+
                     b.HasIndex("HotelId", "ApartmentId")
                         .IsUnique();
 
@@ -206,9 +195,10 @@ namespace HotelApp.Data.Migrations
                         {
                             Id = 1,
                             ApartmentId = 2,
+                            CustomerId = 1,
                             HotelId = 1,
-                            RegistrationDate = new DateTime(2022, 7, 20, 11, 3, 20, 908, DateTimeKind.Utc).AddTicks(4000),
-                            ReleaseDate = new DateTime(2022, 7, 21, 12, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegistrationDate = new DateTime(2022, 7, 26, 7, 46, 11, 480, DateTimeKind.Utc).AddTicks(7827),
+                            ReleaseDate = new DateTime(2022, 7, 27, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -226,23 +216,24 @@ namespace HotelApp.Data.Migrations
                     b.HasOne("HotelApp.Data.Entities.Hotel", null)
                         .WithMany("Customers")
                         .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("HotelApp.Data.Entities.Reservation", null)
-                        .WithOne("Customer")
-                        .HasForeignKey("HotelApp.Data.Entities.Customer", "ReservationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("HotelApp.Data.Entities.Reservation", b =>
                 {
+                    b.HasOne("HotelApp.Data.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("HotelApp.Data.Entities.Hotel", null)
                         .WithMany("Reservations")
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("HotelApp.Data.Entities.Hotel", b =>
@@ -252,12 +243,6 @@ namespace HotelApp.Data.Migrations
                     b.Navigation("Customers");
 
                     b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("HotelApp.Data.Entities.Reservation", b =>
-                {
-                    b.Navigation("Customer")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelApp.Data.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20220715121258_NewCustomerConstraints")]
-    partial class NewCustomerConstraints
+    [Migration("20220726074611_ChangesCustomerDatabase")]
+    partial class ChangesCustomerDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -93,15 +93,12 @@ namespace HotelApp.Data.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<int>("ApartmentId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CNP")
                         .IsRequired()
                         .HasMaxLength(13)
                         .HasColumnType("nvarchar(13)");
 
-                    b.Property<int>("HotelId")
+                    b.Property<int?>("HotelId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -109,19 +106,9 @@ namespace HotelApp.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("ReservationId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ReservationId")
-                        .IsUnique();
-
-                    b.HasIndex("ApartmentId", "HotelId")
-                        .IsUnique();
-
-                    b.HasIndex("HotelId", "CNP")
-                        .IsUnique();
+                    b.HasIndex("HotelId");
 
                     b.ToTable("Customer");
 
@@ -130,11 +117,8 @@ namespace HotelApp.Data.Migrations
                         {
                             Id = 1,
                             Age = 20,
-                            ApartmentId = 2,
                             CNP = "1234567891011",
-                            HotelId = 1,
-                            Name = "Cristi",
-                            ReservationId = 1
+                            Name = "Cristi"
                         });
                 });
 
@@ -187,6 +171,9 @@ namespace HotelApp.Data.Migrations
                     b.Property<int>("ApartmentId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<int>("HotelId")
                         .HasColumnType("int");
 
@@ -198,7 +185,10 @@ namespace HotelApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HotelId");
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("HotelId", "ApartmentId")
+                        .IsUnique();
 
                     b.ToTable("Reservation");
 
@@ -207,9 +197,10 @@ namespace HotelApp.Data.Migrations
                         {
                             Id = 1,
                             ApartmentId = 2,
+                            CustomerId = 1,
                             HotelId = 1,
-                            RegistrationDate = new DateTime(2022, 7, 15, 12, 12, 57, 604, DateTimeKind.Utc).AddTicks(5497),
-                            ReleaseDate = new DateTime(2022, 7, 16, 12, 12, 57, 604, DateTimeKind.Utc).AddTicks(5498)
+                            RegistrationDate = new DateTime(2022, 7, 26, 7, 46, 11, 480, DateTimeKind.Utc).AddTicks(7827),
+                            ReleaseDate = new DateTime(2022, 7, 27, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -227,23 +218,24 @@ namespace HotelApp.Data.Migrations
                     b.HasOne("HotelApp.Data.Entities.Hotel", null)
                         .WithMany("Customers")
                         .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("HotelApp.Data.Entities.Reservation", null)
-                        .WithOne("Customer")
-                        .HasForeignKey("HotelApp.Data.Entities.Customer", "ReservationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("HotelApp.Data.Entities.Reservation", b =>
                 {
+                    b.HasOne("HotelApp.Data.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("HotelApp.Data.Entities.Hotel", null)
                         .WithMany("Reservations")
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("HotelApp.Data.Entities.Hotel", b =>
@@ -253,12 +245,6 @@ namespace HotelApp.Data.Migrations
                     b.Navigation("Customers");
 
                     b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("HotelApp.Data.Entities.Reservation", b =>
-                {
-                    b.Navigation("Customer")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

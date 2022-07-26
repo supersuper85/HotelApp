@@ -82,14 +82,6 @@ namespace HotelApp.BLL.Implementations
 
             return modifingApartmentResponse && modifingCustomerResponse ? _mapper.Map<ReservationDto>(addedReservation) : null;
 
-            var reservedApartment = await _defaultApartmentRepository.SingleOrDefaultAsync(x => x.Id == model.ApartmentId);
-
-            reservedApartment.ReservationId = addedReservation.Id;
-            reservedApartment.CustomerId = addedReservation.Customer.Id;
-
-            await _defaultApartmentRepository.UpdateAsync(reservedApartment);
-
-            return _mapper.Map<ReservationDto>(addedReservation);
 
         }
         public async Task<bool> EditAReservation(ReservationDto model)

@@ -19,8 +19,7 @@ namespace HotelApp.Data.Entities.Configurations
             builder.Property(x => x.Age).IsRequired();
      
 
-            builder.HasIndex(x => new { x.ApartmentId, x.HotelId }).IsUnique();
-            builder.HasIndex(x => new { x.HotelId, x.CNP, }).IsUnique();
+            
 
             builder.HasData(new Customer
             {
