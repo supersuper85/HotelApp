@@ -14,7 +14,7 @@ namespace HotelApp.UnitTests.ModelsValidatorTests
 
             Action act = () => validator.CheckNameHaveCorrectLength(name, nameof(name));
             ModelValidationException exception = Assert.Throws<ModelValidationException>(act);
-            Assert.Equal($"The {nameof(name)} cannot be longer than 100 characters and less than 3 characters!", exception.Message);
+            Assert.Equal($"The {nameof(name)} property cannot be longer than 100 characters and less than 3 characters!", exception.Message);
         }
 
         [Fact]
@@ -25,7 +25,7 @@ namespace HotelApp.UnitTests.ModelsValidatorTests
 
             Action act = () => validator.CheckNameHaveCorrectLength(name, nameof(name));
             ModelValidationException exception = Assert.Throws<ModelValidationException>(act);
-            Assert.Equal($"The {nameof(name)} cannot be longer than 100 characters and less than 3 characters!", exception.Message);
+            Assert.Equal($"The {nameof(name)} property cannot be longer than 100 characters and less than 3 characters!", exception.Message);
         }
 
         [Fact]

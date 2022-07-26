@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
+using HotelApp.API.Constants;
 using HotelApp.API.Exceptions;
-using HotelApp.API.Models.OtherInputModels;
 using HotelApp.API.Models.ReservationModels;
-using HotelApp.API.Validations;
 using HotelApp.API.Validations.ModelsValidations;
-using HotelApp.API.Validations.OtherInputModelsValidations;
+using HotelApp.API.Validations;
 using HotelApp.BLL.Dto;
 using HotelApp.BLL.Exceptions;
 using HotelApp.BLL.Interfaces;
@@ -13,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HotelApp.API.Controllers
 {
     [ApiController]
+    [Route(RouteConstants.RouteReservation)]
     public class ReservationController : Controller
     {
         private readonly IMapper _mapper;
@@ -29,7 +29,7 @@ namespace HotelApp.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet("GetAllReservationsWithTheirCustomers")]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllReservationsWithTheirCustomers()
         {
             try
@@ -42,16 +42,16 @@ namespace HotelApp.API.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
-                return BadRequest();
+                throw new ApplicationException();
             }
         }
 
-        [HttpGet("GetAReservationWithHisCustomer")]
+        [HttpGet("GetById")]
         public async Task<IActionResult> GetAReservationWithHisCustomer(int id)
         {
             try
             {
-                var result = await _reservationService.GetAReservationWithHisCustomer(id);
+                var result = await _reservationService.GetAReservationById(id);
                 if(result == null)
                 {
                     return BadRequest("The ID entered is not associated with any reservation");
@@ -63,12 +63,12 @@ namespace HotelApp.API.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
-                return BadRequest();
+                throw new ApplicationException();
             }
         }
 
-        [HttpPost("CreateReservation")]
-        public async Task<IActionResult> CreateReservation([FromBody] ReservationPostModel model)
+        [HttpPost("Create")]
+        public async Task<IActionResult> CreateReservation([FromBody] ReservationCreateModel model)
         {
             try
             {
@@ -93,12 +93,12 @@ namespace HotelApp.API.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
-                return BadRequest();
+                throw new ApplicationException();
             }
         }
 
-        [HttpPut("EditReservation")]
-        public async Task<ActionResult> EditReservation([FromBody] ReservationPutModel model)
+        [HttpPut("Edit")]
+        public async Task<ActionResult> EditReservation([FromBody] ReservationEditModel model)
         {
             try
             {
@@ -135,13 +135,13 @@ namespace HotelApp.API.Controllers
             }
         }
 
-        [HttpDelete("DeleteReservation")]
-        public async Task<IActionResult> DeleteReservation([FromBody] IdModel model)
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> DeleteReservation([FromBody] ReservationDeleteModel model)
         {
             try
             {
-                var reservationValidator = new IdModelValidator();
-                reservationValidator.CheckIdModel(model);
+                var reservationValidator = new ReservationValidator();
+                reservationValidator.CheckReservationDeleteModel(model);
 
                 var result = await _reservationService.Delete(model.Id);
                 if (result != null)
@@ -166,7 +166,7 @@ namespace HotelApp.API.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
-                return BadRequest();
+                throw new ApplicationException();
             }
         }
     }

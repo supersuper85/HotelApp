@@ -5,18 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HotelApp.Data.Implementations
 {
-    public class ApartmentRepository<T> : BaseEntityFrameworkRepository<T>, IApartmentRepository<T>,  IRepository<T> where T : Apartment
+    public class ApartmentRepository : BaseEntityFrameworkRepository<Apartment>, IApartmentRepository
     {
-        protected readonly DbSet<T> _entities;
-        protected readonly DataBaseContext Context;
-
-
         public ApartmentRepository(DataBaseContext context) : base(context)
         {
-            Context = context;
-            _entities = context.Set<T>();
         }
-        public async Task<IList<T>> GetAllAvailableApartments(CancellationToken cancellationToken = default(CancellationToken))
+
+        public async Task<IList<Apartment>> GetAllAvailableApartments(CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _entities.Where(s => s.ReservationId == 0).ToListAsync(cancellationToken);
         }

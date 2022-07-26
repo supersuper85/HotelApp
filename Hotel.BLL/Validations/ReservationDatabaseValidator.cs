@@ -12,24 +12,17 @@ namespace HotelApp.BLL.Validations
 {
     public class ReservationDatabaseValidator 
     {
-        private readonly IRepository<Reservation> _defaultReservationRepository;
-        private readonly IRepository<Apartment> _defaultApartmentRepository;
-        private readonly IRepository<Hotel> _defaultHotelRepository;
+        private readonly IReservationRepository _reservationRepository;
+        private readonly IApartmentRepository _apartmentRepository;
+        private readonly IRepository<Hotel> _hotelRepository;
+        private readonly ICustomerRepository _customerRepository;
 
-        public ReservationDatabaseValidator(IRepository<Reservation> defaultReservationRepository, IRepository<Apartment> defaultApartmentRepository, IRepository<Hotel> defaultHotelRepository)
+        public ReservationDatabaseValidator(IReservationRepository reservationRepository, ICustomerRepository customerRepository, IApartmentRepository apartmentRepository, IRepository<Hotel> hotelRepository)
         {
-            _defaultReservationRepository = defaultReservationRepository;
-            _defaultApartmentRepository = defaultApartmentRepository;
-            _defaultHotelRepository = defaultHotelRepository;
-        }
-        public ReservationDatabaseValidator(IRepository<Reservation> defaultReservationRepository, IRepository<Apartment> defaultApartmentRepository)
-        {
-            _defaultReservationRepository = defaultReservationRepository;
-            _defaultApartmentRepository = defaultApartmentRepository;
-        }
-        public ReservationDatabaseValidator(IRepository<Reservation> defaultReservationRepository)
-        {
-            _defaultReservationRepository = defaultReservationRepository;
+            _reservationRepository = reservationRepository;
+            _apartmentRepository = apartmentRepository;
+            _hotelRepository = hotelRepository;
+            _customerRepository = customerRepository;
         }
         public async Task CheckReservationPostModel(ReservationDto model)
         {
@@ -37,18 +30,19 @@ namespace HotelApp.BLL.Validations
             await CheckHotelExists(model);
             await CheckCustomerAlreadyHaveRoomInHotel(model);
             await CheckApartmentAlreadyRent(model);
+            await CheckCustomerExists(model);
         }
         private async Task CheckApartmentExists(ReservationDto model)
         {
 
-            if (!await _defaultApartmentRepository.ExistsAsync(x => x.Id == model.ApartmentId))
+            if (!await _apartmentRepository.ExistsAsync(x => x.Id == model.ApartmentId))
             {
                 throw new DatabaseValidatorException("The entered apartment ID is not valid!");
             }
         }
         private async Task CheckHotelExists(ReservationDto model)
         {
-            if (!await _defaultApartmentRepository.ExistsAsync(x => x.Id == model.HotelId))
+            if (!await _apartmentRepository.ExistsAsync(x => x.Id == model.HotelId))
             {
                 throw new DatabaseValidatorException("The entered hotel ID is not valid!");
             }
@@ -56,30 +50,40 @@ namespace HotelApp.BLL.Validations
         private async Task CheckCustomerAlreadyHaveRoomInHotel(ReservationDto model)
         {
 
-            if (await _defaultReservationRepository.ExistsAsync(x => x.Customer.CNP == model.Customer.CNP) && await _defaultReservationRepository.ExistsAsync(x => x.HotelId == model.HotelId))
+            if (await _reservationRepository.ExistsAsync(x => x.CustomerId == model.CustomerId && x.HotelId == model.HotelId))
             {
-                throw new DatabaseValidatorException("Someone with this CNP already owns an apartment in this hotel!");
+                throw new DatabaseValidatorException("This CustomerId already owns an apartment in this hotel!");
             }
         }
         private async Task CheckApartmentModified(ReservationDto model, Reservation entity)
         {
             if (entity.ApartmentId != model.ApartmentId)
             {
-                await CheckApartmentAlreadyRent(model, entity);
+                await CheckApartmentAlreadyRentWithoutHotelId(model, entity);
             }
         }
-        private async Task CheckApartmentAlreadyRent(ReservationDto model, Reservation entity)
+        private async Task CheckApartmentAlreadyRentWithoutHotelId(ReservationDto model, Reservation entity)
         {
-            if (await _defaultReservationRepository.ExistsAsync(x => x.ApartmentId == model.ApartmentId) && await _defaultReservationRepository.ExistsAsync(x => x.HotelId == entity.HotelId))
+            if (await _reservationRepository.ExistsAsync(x => x.ApartmentId == model.ApartmentId && x.HotelId == entity.HotelId))
             {
                 throw new DatabaseValidatorException("The introduced apartment is already rented!");
             }
         }
+
+
         private async Task CheckApartmentAlreadyRent(ReservationDto model)
         {
-            if (await _defaultReservationRepository.ExistsAsync(x => x.ApartmentId == model.ApartmentId) && await _defaultReservationRepository.ExistsAsync(x => x.HotelId == model.HotelId))
+            if (await _reservationRepository.ExistsAsync(x => x.ApartmentId == model.ApartmentId && x.HotelId == model.HotelId))
             {
                 throw new DatabaseValidatorException("The introduced apartment is already rented!");
+            }
+        }
+        private async Task CheckCustomerExists(ReservationDto model)
+        {
+
+            if (!await _customerRepository.ExistsAsync(x => x.Id == model.Customer.Id))
+            {
+                throw new DatabaseValidatorException("The entered customer ID is not valid!");
             }
         }
 

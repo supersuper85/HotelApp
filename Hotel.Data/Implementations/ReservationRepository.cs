@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace HotelApp.Data.Implementations
 {
-    public class ReservationRepository<T> : BaseEntityFrameworkRepository<T>, IReservationRepository<T>, IRepository<T> where T : Reservation
+    public class ReservationRepository :  BaseEntityFrameworkRepository<Reservation>, IReservationRepository
     {
         protected readonly DbSet<T> _entities;
         protected readonly DataBaseContext Context;
@@ -17,13 +17,16 @@ namespace HotelApp.Data.Implementations
             _entities = context.Set<T>();
         }
 
-        public async Task<IList<T>> GetAllReservationsWithTheirCustomers(CancellationToken cancellationToken = default)
+        public async Task<IList<Reservation>> GetAllReservations()
         {
-            return await _entities.Include("Customer").ToListAsync(cancellationToken);
+            var allReservations = await _entities.Include(x=>x.Customer).ToListAsync();
+            return allReservations;
         }
 
-        public async Task<T> GetAReservationWithHisCustomer(int id, CancellationToken cancellationToken = default(CancellationToken)) {
-            return await _entities.Include("Customer").SingleOrDefaultAsync(x => x.Id == id);
+        public async Task<Reservation> GetReservationById(int id)
+        {
+            var result = await _entities.Include(x => x.Customer).SingleOrDefaultAsync(x => x.Id == id);
+            return result;
         }
     }
 }
