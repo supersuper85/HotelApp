@@ -74,10 +74,6 @@ namespace HotelApp.BLL.Implementations
 
             var customer = await _customerRepository.SingleOrDefaultAsync(x => x.Id == customerId);
 
-/*            customer.ApartmentId = model.ApartmentId;
-            customer.HotelId = model.HotelId;
-            customer.ReservationId = addedReservation.Id;*/
-
             var modifingCustomerResponse = await _customerRepository.UpdateAsync(customer);
 
             return modifingApartmentResponse && modifingCustomerResponse ? _mapper.Map<ReservationDto>(addedReservation) : null;
