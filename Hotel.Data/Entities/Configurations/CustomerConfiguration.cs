@@ -19,8 +19,6 @@ namespace HotelApp.Data.Entities.Configurations
             builder.Property(x => x.Age).IsRequired();
      
 
-            
-
             builder.HasData(new Customer
             {
                 Id = 1,
