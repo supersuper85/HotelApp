@@ -5,6 +5,7 @@ namespace HotelApp.Data.Interfaces
 {
     public interface ICustomerRepository : IRepository<Customer>
     {
-        Task<Customer> GetCustomerById(int id, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Customer> GetCustomerById(int id);
+        Task<Customer> GetCustomerByIdAsNoTracking(int id);
     }
 }

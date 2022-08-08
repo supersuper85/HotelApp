@@ -1,4 +1,6 @@
-﻿namespace HotelApp.Data.Entities
+﻿using HotelApp.Data.Interfaces;
+
+namespace HotelApp.Data.Entities
 {
     public class Customer
     {
@@ -6,7 +8,6 @@
         public int Age { get; set; }
         public string Name { get; set; }
         public string CNP { get; set; }
-
 
     }
 }

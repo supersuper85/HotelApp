@@ -69,8 +69,6 @@ namespace HotelApp.BLL.Validations
                 throw new DatabaseValidatorException("The introduced apartment is already rented!");
             }
         }
-
-
         private async Task CheckApartmentAlreadyRent(ReservationDto model)
         {
             if (await _reservationRepository.ExistsAsync(x => x.ApartmentId == model.ApartmentId && x.HotelId == model.HotelId))
@@ -86,6 +84,7 @@ namespace HotelApp.BLL.Validations
                 throw new DatabaseValidatorException("The entered customer ID is not valid!");
             }
         }
+
 
         public async Task CheckReservationPutModel(ReservationDto model, Reservation entity)
         {
@@ -109,6 +108,7 @@ namespace HotelApp.BLL.Validations
                 throw new DatabaseValidatorException("No change was detected between the model entered and the one from the database.");
             }
         }
+
 
         public async Task CheckReservationDeleteModel(Reservation entity)
         {

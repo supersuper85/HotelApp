@@ -17,8 +17,4 @@
     <ProjectReference Include="..\Hotel.Data\HotelApp.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Mappers\ModelMappers\" />
-  </ItemGroup>
-
 </Project>
