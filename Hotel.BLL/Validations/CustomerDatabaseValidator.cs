@@ -88,7 +88,7 @@ namespace HotelApp.BLL.Validations
         }
         private async Task CheckCustomerExists(int id)
         {
-            if (await _customerRepository.ExistsAsync(x => x.Id == id))
+            if (!await _customerRepository.ExistsAsync(x => x.Id == id))
             {
                 throw new DatabaseValidatorException("The entered id does not correspond to any customer!");
             }

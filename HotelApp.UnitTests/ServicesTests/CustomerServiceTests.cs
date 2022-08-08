@@ -201,7 +201,7 @@ namespace HotelApp.UnitTests.ServicesTests
             _customerRepoMock.Setup(x => x.SingleOrDefaultAsync(x => x.Id == inputId, CancellationToken.None)).ReturnsAsync(databaseCustomer);
 
             _reservationRepoMock.Setup(x => x.ExistsAsync(x => x.CustomerId == inputId, CancellationToken.None)).ReturnsAsync(false);
-            _customerRepoMock.Setup(x => x.ExistsAsync(x => x.Id == inputId, CancellationToken.None)).ReturnsAsync(false);
+            _customerRepoMock.Setup(x => x.ExistsAsync(x => x.Id == inputId, CancellationToken.None)).ReturnsAsync(true);
 
 
             _customerRepoMock.Setup(x => x.SingleOrDefaultAsync(x => x.Id == inputId, CancellationToken.None)).ReturnsAsync(databaseCustomer);
