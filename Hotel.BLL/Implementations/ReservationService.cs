@@ -72,11 +72,11 @@ namespace HotelApp.BLL.Implementations
             var modifingApartmentResponse = await _apartmentRepository.UpdateAsync(reservedApartment);
 
 
-            var customer = await _customerRepository.SingleOrDefaultAsync(x => x.Id == customerId);
+            /*var customer = await _customerRepository.SingleOrDefaultAsync(x => x.Id == customerId);
 
-            var modifingCustomerResponse = await _customerRepository.UpdateAsync(customer);
+            var modifingCustomerResponse = await _customerRepository.UpdateAsync(customer);*/
 
-            return modifingApartmentResponse && modifingCustomerResponse ? _mapper.Map<ReservationDto>(addedReservation) : null;
+            return modifingApartmentResponse ? _mapper.Map<ReservationDto>(addedReservation) : null;
 
 
         }

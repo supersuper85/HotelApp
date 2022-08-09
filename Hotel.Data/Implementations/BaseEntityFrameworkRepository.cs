@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace HotelApp.Data.Implementations
 {
-    public class BaseEntityFrameworkRepository<T> : IRepository<T> where T : class
+    public abstract class BaseEntityFrameworkRepository<T> : IRepository<T> where T : class
     {
         protected readonly DbSet<T> _entities;
         protected readonly DataBaseContext Context;
@@ -77,11 +77,8 @@ namespace HotelApp.Data.Implementations
             return await SaveChangesAsync(cancellationToken) > 0;
         }
 
-        /*protected abstract Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));*/
-        protected async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return await Context.SaveChangesAsync(cancellationToken);
-        }
+        protected abstract Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+        
     }
     
 }

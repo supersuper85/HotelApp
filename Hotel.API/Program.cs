@@ -13,6 +13,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMapping();
 builder.Services.AddServiceLayer();
 builder.Services.AddPersistenceLayer(builder.Configuration);
+builder.Services.AddHttpClientLayer();
 
 var app = builder.Build();
 

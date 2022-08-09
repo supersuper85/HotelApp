@@ -33,7 +33,7 @@ namespace HotelApp.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet("getall")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -50,7 +50,7 @@ namespace HotelApp.API.Controllers
             }
         }
 
-        [HttpGet("GetById")]
+        [HttpGet("getbyid")]
         public async Task<IActionResult> GetAReservationWithHisCustomer(int id)
         {
             try
@@ -71,7 +71,7 @@ namespace HotelApp.API.Controllers
             }
         }
 
-        [HttpPost("Create")]
+        [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CustomerCreateModel model)
         {
             try
@@ -101,7 +101,7 @@ namespace HotelApp.API.Controllers
             }
         }
 
-        [HttpPut("Edit")]
+        [HttpPut("edit")]
         public async Task<ActionResult> Edit([FromBody] CustomerEditModel model)
         {
             try
@@ -139,7 +139,7 @@ namespace HotelApp.API.Controllers
             }
         }
 
-        [HttpDelete("Delete")]
+        [HttpDelete("delete")]
         public async Task<IActionResult> Delete([FromBody] CustomerDeleteModel model)
         {
             try
