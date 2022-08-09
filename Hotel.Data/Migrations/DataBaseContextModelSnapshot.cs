@@ -30,6 +30,9 @@ namespace HotelApp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("ApartmentNumber")
+                        .HasColumnType("int");
+
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
@@ -39,21 +42,18 @@ namespace HotelApp.Data.Migrations
                     b.Property<int>("HotelId")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberOfRooms")
-                        .HasColumnType("int");
+                    b.Property<float>("NumberOfRooms")
+                        .HasColumnType("real");
 
                     b.Property<int>("ReservationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoomNumber")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("HotelId");
-
-                    b.HasIndex("RoomNumber")
+                    b.HasIndex("ApartmentNumber")
                         .IsUnique();
+
+                    b.HasIndex("HotelId");
 
                     b.ToTable("Apartment");
 
@@ -61,22 +61,22 @@ namespace HotelApp.Data.Migrations
                         new
                         {
                             Id = 1,
+                            ApartmentNumber = 1,
                             CustomerId = 0,
                             DailyRentInEuro = 25f,
                             HotelId = 1,
-                            NumberOfRooms = 2,
-                            ReservationId = 0,
-                            RoomNumber = 1
+                            NumberOfRooms = 2f,
+                            ReservationId = 0
                         },
                         new
                         {
                             Id = 2,
+                            ApartmentNumber = 2,
                             CustomerId = 1,
                             DailyRentInEuro = 35f,
                             HotelId = 1,
-                            NumberOfRooms = 3,
-                            ReservationId = 1,
-                            RoomNumber = 2
+                            NumberOfRooms = 3f,
+                            ReservationId = 1
                         });
                 });
 
@@ -96,17 +96,12 @@ namespace HotelApp.Data.Migrations
                         .HasMaxLength(13)
                         .HasColumnType("nvarchar(13)");
 
-                    b.Property<int?>("HotelId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("HotelId");
 
                     b.ToTable("Customer");
 
@@ -197,8 +192,8 @@ namespace HotelApp.Data.Migrations
                             ApartmentId = 2,
                             CustomerId = 1,
                             HotelId = 1,
-                            RegistrationDate = new DateTime(2022, 7, 26, 7, 46, 11, 480, DateTimeKind.Utc).AddTicks(7827),
-                            ReleaseDate = new DateTime(2022, 7, 27, 12, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegistrationDate = new DateTime(2022, 8, 8, 11, 12, 24, 277, DateTimeKind.Utc).AddTicks(9861),
+                            ReleaseDate = new DateTime(2022, 8, 9, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -209,14 +204,6 @@ namespace HotelApp.Data.Migrations
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("HotelApp.Data.Entities.Customer", b =>
-                {
-                    b.HasOne("HotelApp.Data.Entities.Hotel", null)
-                        .WithMany("Customers")
-                        .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("HotelApp.Data.Entities.Reservation", b =>
@@ -239,8 +226,6 @@ namespace HotelApp.Data.Migrations
             modelBuilder.Entity("HotelApp.Data.Entities.Hotel", b =>
                 {
                     b.Navigation("Apartments");
-
-                    b.Navigation("Customers");
 
                     b.Navigation("Reservations");
                 });

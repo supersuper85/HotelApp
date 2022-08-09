@@ -19,6 +19,13 @@ namespace HotelApp.API.Validations
                 throw new ModelValidationException($"The {propertyName} property cannot have a value equal or less than 0!");
             }
         }
+        public void CheckPrice(float price, string propertyName)
+        {
+            if (price < 1.0f)
+            {
+                throw new ModelValidationException($"The {propertyName} property cannot have a value less than 1.0$!");
+            }
+        }
         public void CheckObjectIsntNull<T>(T obj, string propertyName) where T : class
         {
             if (obj == null)

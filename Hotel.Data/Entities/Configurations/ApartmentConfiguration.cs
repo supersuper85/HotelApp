@@ -14,8 +14,8 @@ namespace HotelApp.Data.Entities.Configurations
 
             builder.Property(x => x.NumberOfRooms).IsRequired();
 
-            builder.Property(x => x.RoomNumber).IsRequired();
-            builder.HasIndex(x => x.RoomNumber).IsUnique();
+            builder.Property(x => x.ApartmentNumber).IsRequired();
+            builder.HasIndex(x => x.ApartmentNumber).IsUnique();
 
             builder.Property(x => x.ReservationId).IsRequired();
 
@@ -27,7 +27,7 @@ namespace HotelApp.Data.Entities.Configurations
                     Id = 1,
                     DailyRentInEuro = 25,
                     NumberOfRooms = 2,
-                    RoomNumber = 1,
+                    ApartmentNumber = 1,
 
                     CustomerId = 0,
                     ReservationId = 0,
@@ -38,7 +38,7 @@ namespace HotelApp.Data.Entities.Configurations
                     Id = 2,
                     DailyRentInEuro = 35,
                     NumberOfRooms = 3,
-                    RoomNumber = 2,
+                    ApartmentNumber = 2,
 
                     CustomerId = 1,
                     ReservationId = 1,

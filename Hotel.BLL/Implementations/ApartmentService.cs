@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HotelApp.BLL.Dto;
 using HotelApp.BLL.Interfaces;
+using HotelApp.BLL.Validations;
 using HotelApp.Data.Entities;
 using HotelApp.Data.Interfaces;
 
@@ -25,15 +26,17 @@ namespace HotelApp.BLL.Implementations
 
         public async Task<ApartmentDto> Get(int id)
         {
-            var apartments = await _apartmentRepository.GetAllAsync();
-            var apartmentsyById = apartments.SingleOrDefault(e => e.Id == id);
-            var mapped = _mapper.Map<ApartmentDto>(apartmentsyById);
+            var apartment = await _apartmentRepository.GetApartmentById(id);
+            var mapped = _mapper.Map<ApartmentDto>(apartment);
 
             return mapped;
         }
 
         public async Task<ApartmentDto> Add(ApartmentDto model)
         {
+            var apartmentValidator = new ApartmentDatabaseValidator(null, null, _apartmentRepository, null);
+            await apartmentValidator.CheckApartmentPostModel(model);
+
             var mappedApartment = _mapper.Map<ApartmentDto, Apartment>(model);
             var addedApartment = await _apartmentRepository.AddAsync(mappedApartment);
 
@@ -42,27 +45,30 @@ namespace HotelApp.BLL.Implementations
         }
         public async Task<bool> Edit(ApartmentDto model)
         {
-            if (await _apartmentRepository.ExistsAsync(x => x.Id == model.Id))
-            {
-                var mappedApartment = _mapper.Map<ApartmentDto, Apartment>(model);
-                var response = await _apartmentRepository.UpdateAsync(mappedApartment);
+            var entity = await _apartmentRepository.SingleOrDefaultAsync(x => x.Id == model.Id);
 
-                return response;
-            }
-            return false;
+            var apartmentValidator = new ApartmentDatabaseValidator(null, null, _apartmentRepository, null);
+            await apartmentValidator.CheckApartmentPutModel(entity, model);
+
+            entity.NumberOfRooms = model.NumberOfRooms;
+            entity.ApartmentNumber = model.ApartmentNumber;
+            entity.DailyRentInEuro = model.DailyRentInEuro;
+
+            var response = await _apartmentRepository.UpdateAsync(entity);
+
+            return response;
         }
 
         public async Task<ApartmentDto> Delete(int id)
         {
-            if (await _apartmentRepository.ExistsAsync(x => x.Id == id))
-            {
-                var apartment = await _apartmentRepository.SingleOrDefaultAsync(x => x.Id == id);
+            var apartment = await _apartmentRepository.SingleOrDefaultAsync(x => x.Id == id);
 
-                var response = await _apartmentRepository.DeleteAsync(apartment);
-                return response ? _mapper.Map<ApartmentDto>(apartment) : null;
+            var apartmentValidator = new ApartmentDatabaseValidator(null, null, _apartmentRepository, null);
+            await apartmentValidator.CheckApartmentDeleteModel(apartment);
+                
+            var response = await _apartmentRepository.DeleteAsync(apartment);
+            return response ? _mapper.Map<ApartmentDto>(apartment) : null;
 
-            }
-            return null;
         }
 
         public async Task<IList<ApartmentDto>> GetAllAvailableHotelRooms()

@@ -1,4 +1,6 @@
-﻿namespace HotelApp.Data.Entities
+﻿using HotelApp.Data.Interfaces;
+
+namespace HotelApp.Data.Entities
 {
     public class Reservation
     {

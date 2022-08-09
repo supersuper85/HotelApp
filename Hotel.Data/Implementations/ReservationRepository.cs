@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace HotelApp.Data.Implementations
 {
-    public class ReservationRepository :  BaseEntityFrameworkRepository<Reservation>, IReservationRepository
+    public class ReservationRepository :  DefaultRepository<Reservation>, IReservationRepository
     {
         public ReservationRepository(DataBaseContext context) : base(context)
         {
