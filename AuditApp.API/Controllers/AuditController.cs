@@ -72,6 +72,7 @@ namespace AuditApp.API.Controllers
         {
             try
             {
+
                 var auditValidator = new AuditValidator();
                 auditValidator.CheckAuditPostModel(model);
 
@@ -79,6 +80,7 @@ namespace AuditApp.API.Controllers
                 var audit = await _auditService.Add(mappedModel);
 
                 return Ok(audit);
+
             }
             catch (ModelValidationException e)
             {
@@ -104,6 +106,7 @@ namespace AuditApp.API.Controllers
             {
                 var auditValidator = new AuditValidator();
                 auditValidator.CheckAuditPutModel(model);
+
 
                 var mappedModel = _mapper.Map<AuditDto>(model);
                 var isModified = await _auditService.Edit(mappedModel);

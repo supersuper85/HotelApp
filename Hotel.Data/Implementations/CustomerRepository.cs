@@ -1,4 +1,5 @@
-﻿using HotelApp.Data.Entities;
+﻿using FsCheck;
+using HotelApp.Data.Entities;
 using HotelApp.Data.Entities.Context;
 using HotelApp.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;

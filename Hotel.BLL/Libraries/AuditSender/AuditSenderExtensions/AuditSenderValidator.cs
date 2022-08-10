@@ -2,6 +2,7 @@
 
 namespace HotelApp.BLL.Extensions.Audit.AuditHelpers
 {
+
     public class AuditSenderValidator<T> where T : class
     {
         public void VerifyObjectHaveAnId()

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
 
+
 namespace HotelApp.Data.Implementations
 {
     public class DefaultRepository<T> :  BaseEntityFrameworkRepository<T> where T : class
