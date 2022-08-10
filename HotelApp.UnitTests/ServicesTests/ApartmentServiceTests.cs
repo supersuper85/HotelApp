@@ -3,6 +3,7 @@ using HotelApp.BLL.Dto;
 using HotelApp.BLL.Implementations;
 using HotelApp.Data.Entities;
 using HotelApp.Data.Interfaces;
+using HotelApp.UnitTests.ServicesTests.ServiceHelpers;
 using Moq;
 using Xunit;
 
@@ -20,9 +21,13 @@ namespace HotelApp.UnitTests.ServicesTests
             _apartmentRepoMock = new Mock<IApartmentRepository>();
             _mapperMock = new Mock<IMapper>();
 
+            var httpClientConfiguration = new HttpClientConfiguration();
+            var httpClient = httpClientConfiguration.GetHttpClient();
+
             _sut = new ApartmentService(
                 _apartmentRepoMock.Object,
-                _mapperMock.Object
+                _mapperMock.Object,
+                httpClient
                 );
         }
 
@@ -83,6 +88,10 @@ namespace HotelApp.UnitTests.ServicesTests
 
             _mapperMock.Setup(x => x.Map<ApartmentDto>(databaseApartment)).Returns(outputApartment);
 
+
+            
+
+
             //Act
             var actualResult = await _sut.Add(inputApartment);
 
@@ -103,6 +112,7 @@ namespace HotelApp.UnitTests.ServicesTests
             _apartmentRepoMock.Setup(x => x.SingleOrDefaultAsync(x => x.Id == inputApartment.Id, CancellationToken.None)).ReturnsAsync(databaseApartment);
 
             _apartmentRepoMock.Setup(x => x.UpdateAsync(databaseApartment, CancellationToken.None)).ReturnsAsync(true);
+
 
             //Act
             var expectedResult = true;
@@ -129,6 +139,7 @@ namespace HotelApp.UnitTests.ServicesTests
 
             _apartmentRepoMock.Setup(x => x.UpdateAsync(databaseApartment, CancellationToken.None)).ReturnsAsync(true);
 
+
             //Act
             var expectedResult = true;
             var actualResult = await _sut.Edit(inputApartment);
@@ -149,6 +160,7 @@ namespace HotelApp.UnitTests.ServicesTests
             _apartmentRepoMock.Setup(x => x.DeleteAsync(databaseApartment, CancellationToken.None)).ReturnsAsync(true);
 
             _mapperMock.Setup(x => x.Map<ApartmentDto>(databaseApartment)).Returns(outputApartment);
+
 
             //Act
             var actualResult = await _sut.Delete(inputId);

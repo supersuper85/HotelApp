@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using HotelApp.BLL.Dto;
+using HotelApp.BLL.Extensions.Audit;
 using HotelApp.BLL.Interfaces;
+using HotelApp.BLL.Libraries.ObjectCloner;
 using HotelApp.BLL.Validations;
 using HotelApp.Data.Entities;
 using HotelApp.Data.Interfaces;
@@ -14,19 +16,21 @@ namespace HotelApp.BLL.Implementations
         private readonly IRepository<Hotel> _hotelRepository;
         private readonly IReservationRepository _reservationRepository;
         private readonly IMapper _mapper;
-
+        private readonly HttpClient _httpClient;
         public ReservationService(
          IReservationRepository reservationRepository,
          ICustomerRepository customerRepository,
          IApartmentRepository apartmentRepository,
-         IRepository<Hotel> defaultHotelRepository
-        , IMapper mapper)
+         IRepository<Hotel> defaultHotelRepository,
+         IMapper mapper,
+         HttpClient httpClient)
         {
             _customerRepository = customerRepository;
             _apartmentRepository = apartmentRepository;
             _hotelRepository = defaultHotelRepository;
             _reservationRepository = reservationRepository;
             _mapper = mapper;
+            _httpClient = httpClient;
         }
 
         public async Task<IList<ReservationDto>> GetAll()
@@ -61,20 +65,27 @@ namespace HotelApp.BLL.Implementations
             var customerId = model.Customer.Id;
             mappedReservation.Customer = null;
 
+            var reservationAuditSender = new AuditSender<Reservation>(_httpClient);
+
             var addedReservation = await _reservationRepository.AddAsync(mappedReservation);
 
+            var addingReservationResponse = addedReservation != null;
+            if (addingReservationResponse)
+                reservationAuditSender.ReportPostRequest(addedReservation);
 
-            var reservedApartment = await _apartmentRepository.SingleOrDefaultAsync(x => x.Id == model.ApartmentId);
+            var newValueOf_Apartment = await _apartmentRepository.SingleOrDefaultAsync(x => x.Id == model.ApartmentId);
 
-            reservedApartment.ReservationId = addedReservation.Id;
-            reservedApartment.CustomerId = customerId;
+            var apartmentObjectCloner = new ObjectCloner<Apartment>();
+            var oldValuesOf_ReservedApartment = apartmentObjectCloner.Clone(newValueOf_Apartment);
 
-            var modifingApartmentResponse = await _apartmentRepository.UpdateAsync(reservedApartment);
+            newValueOf_Apartment.ReservationId = addedReservation.Id;
+            newValueOf_Apartment.CustomerId = customerId;
 
+            var apartmentAuditSender = new AuditSender<Apartment>(_httpClient);
 
-            /*var customer = await _customerRepository.SingleOrDefaultAsync(x => x.Id == customerId);
-
-            var modifingCustomerResponse = await _customerRepository.UpdateAsync(customer);*/
+            var modifingApartmentResponse = await _apartmentRepository.UpdateAsync(newValueOf_Apartment);
+            if (modifingApartmentResponse)
+                apartmentAuditSender.ReportPutRequest(oldValuesOf_ReservedApartment, newValueOf_Apartment);
 
             return modifingApartmentResponse ? _mapper.Map<ReservationDto>(addedReservation) : null;
 
@@ -82,50 +93,86 @@ namespace HotelApp.BLL.Implementations
         }
         public async Task<bool> EditAReservation(ReservationDto model)
         {
-            var reservation = await _reservationRepository.GetReservationById(model.Id);
-
+            var newValueOf_Reservation = await _reservationRepository.GetReservationById(model.Id);
+            
             var reservationValidator = new ReservationDatabaseValidator(_reservationRepository, _customerRepository, _apartmentRepository, _hotelRepository);
-            await reservationValidator.CheckReservationPutModel(model, reservation);
+            await reservationValidator.CheckReservationPutModel(model, newValueOf_Reservation);
 
-            reservation.ApartmentId = model.ApartmentId;
-            reservation.ReleaseDate = model.ReleaseDate;
 
-            var newReservedApartment = await _apartmentRepository.SingleOrDefaultAsync(x => x.Id == model.ApartmentId);
+            var reservationAuditSender = new AuditSender<Reservation>(_httpClient);
+            var apartmentAuditSender = new AuditSender<Apartment>(_httpClient);
 
-            newReservedApartment.ReservationId = reservation.Id;
-            newReservedApartment.CustomerId = reservation.Customer.Id;
+            var reservationObjectCloner = new ObjectCloner<Reservation>();
+            var apartmentObjectCloner = new ObjectCloner<Apartment>();
 
-            var oldReservedApartment = await _apartmentRepository.SingleOrDefaultAsync(x => x.Id == reservation.ApartmentId);
+            var oldValuesOf_Reservation = reservationObjectCloner.Clone(newValueOf_Reservation);
+
+            newValueOf_Reservation.ApartmentId = model.ApartmentId;
+            newValueOf_Reservation.ReleaseDate = model.ReleaseDate;
+
+
+            var newValueOf_NewReservedApartment = await _apartmentRepository.SingleOrDefaultAsync(x => x.Id == model.ApartmentId);
+
+            var oldValuesOf_NewReservedApartment = apartmentObjectCloner.Clone(newValueOf_NewReservedApartment);
+
+            newValueOf_NewReservedApartment.ReservationId = newValueOf_Reservation.Id;
+            newValueOf_NewReservedApartment.CustomerId = newValueOf_Reservation.Customer.Id;
+
+
+            var newValueOf_OldReservedApartment = await _apartmentRepository.SingleOrDefaultAsync(x => x.Id == newValueOf_Reservation.ApartmentId);
+
+            var oldValuesOf_OldReservedApartment = apartmentObjectCloner.Clone(newValueOf_OldReservedApartment);
 
             var foreignKeyNullValue = 0;
-            oldReservedApartment.ReservationId = foreignKeyNullValue;
-            oldReservedApartment.CustomerId = foreignKeyNullValue;
+            newValueOf_OldReservedApartment.ReservationId = foreignKeyNullValue;
+            newValueOf_OldReservedApartment.CustomerId = foreignKeyNullValue;
 
-            var responseReservation = await _reservationRepository.UpdateAsync(reservation);
-            var responseNewApartment = await _apartmentRepository.UpdateAsync(newReservedApartment);
-            var responseOldApartment = await _apartmentRepository.UpdateAsync(oldReservedApartment);
+
+            var responseReservation = await _reservationRepository.UpdateAsync(newValueOf_Reservation);
+            if (responseReservation)
+                apartmentAuditSender.ReportPutRequest(oldValuesOf_Reservation, newValueOf_Reservation);
+
+            var responseNewApartment = await _apartmentRepository.UpdateAsync(newValueOf_NewReservedApartment);
+            if (responseNewApartment)
+                apartmentAuditSender.ReportPutRequest(oldValuesOf_NewReservedApartment, newValueOf_NewReservedApartment);
+
+            var responseOldApartment = await _apartmentRepository.UpdateAsync(newValueOf_OldReservedApartment);
+            if (responseOldApartment)
+                apartmentAuditSender.ReportPutRequest(oldValuesOf_OldReservedApartment, newValueOf_OldReservedApartment);
+
 
             return responseReservation && responseNewApartment && responseOldApartment;
         }
 
         public async Task<ReservationDto> Delete(int id)
         {
-            var reservation = await _reservationRepository.GetReservationById(id);
+            var oldValueOf_Reservation = await _reservationRepository.GetReservationById(id);
 
             var reservationValidator = new ReservationDatabaseValidator(_reservationRepository, _customerRepository, _apartmentRepository, _hotelRepository);
-            await reservationValidator.CheckReservationDeleteModel(reservation);
+            await reservationValidator.CheckReservationDeleteModel(oldValueOf_Reservation);
 
-            var reservedApartment = await _apartmentRepository.SingleOrDefaultAsync(x => x.Id == reservation.ApartmentId);
+            var newValueOf_ReservedApartment = await _apartmentRepository.SingleOrDefaultAsync(x => x.Id == oldValueOf_Reservation.ApartmentId);
+
+            var reservationAuditSender = new AuditSender<Reservation>(_httpClient);
+            var apartmentAuditSender = new AuditSender<Apartment>(_httpClient);
+
+            var apartmentObjectCloner = new ObjectCloner<Apartment>();
+            var oldValuesOf_ReservedApartment = apartmentObjectCloner.Clone(newValueOf_ReservedApartment);
 
             var foreignKeyNullValue = 0;
-            reservedApartment.ReservationId = foreignKeyNullValue;
-            reservedApartment.CustomerId = foreignKeyNullValue;
+            newValueOf_ReservedApartment.ReservationId = foreignKeyNullValue;
+            newValueOf_ReservedApartment.CustomerId = foreignKeyNullValue;
 
 
-            var deletingReservationResponse = await _reservationRepository.DeleteAsync(reservation);
-            var modifingApartmentResponse = await _apartmentRepository.UpdateAsync(reservedApartment);
+            var deletingReservationResponse = await _reservationRepository.DeleteAsync(oldValueOf_Reservation);
+            if (deletingReservationResponse)
+                reservationAuditSender.ReportDeleteRequest(oldValueOf_Reservation);
 
-            return deletingReservationResponse && modifingApartmentResponse ? _mapper.Map<ReservationDto>(reservation) : null;
+            var modifingApartmentResponse = await _apartmentRepository.UpdateAsync(newValueOf_ReservedApartment);
+            if (deletingReservationResponse)
+                apartmentAuditSender.ReportPutRequest(oldValuesOf_ReservedApartment, newValueOf_ReservedApartment);
+
+            return deletingReservationResponse && modifingApartmentResponse ? _mapper.Map<ReservationDto>(oldValueOf_Reservation) : null;
         }
     }
 }

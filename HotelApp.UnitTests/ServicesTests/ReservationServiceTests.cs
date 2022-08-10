@@ -3,6 +3,7 @@ using HotelApp.BLL.Dto;
 using HotelApp.BLL.Implementations;
 using HotelApp.Data.Entities;
 using HotelApp.Data.Interfaces;
+using HotelApp.UnitTests.ServicesTests.ServiceHelpers;
 using Moq;
 using Xunit;
 
@@ -18,7 +19,6 @@ namespace HotelApp.UnitTests.ServicesTests
         private readonly Mock<IReservationRepository> _reservationRepoMock;
         private readonly Mock<IMapper> _mapperMock;
 
-
         public ReservationServiceTests()
         {
             _customerRepoMock = new Mock<ICustomerRepository>();
@@ -27,12 +27,16 @@ namespace HotelApp.UnitTests.ServicesTests
             _reservationRepoMock = new Mock<IReservationRepository>();
             _mapperMock = new Mock<IMapper>();
 
+            var httpClientConfiguration = new HttpClientConfiguration();
+            var httpClient = httpClientConfiguration.GetHttpClient();
+
             _sut = new ReservationService(
                 _reservationRepoMock.Object,
                 _customerRepoMock.Object,
                 _apartmentRepoMock.Object,
                 _hotelRepoMock.Object,
-                _mapperMock.Object);
+                _mapperMock.Object,
+                httpClient);
         }
 
         [Fact]
@@ -200,6 +204,7 @@ namespace HotelApp.UnitTests.ServicesTests
 
 
             _mapperMock.Setup(x => x.Map<ReservationDto>(databaseReservation)).Returns(outputReservation);
+
 
             //Act
             var actualResult = await _sut.Delete(inputId);

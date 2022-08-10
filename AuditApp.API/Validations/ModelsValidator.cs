@@ -27,7 +27,7 @@ namespace AuditApp.API.Validations
                 throw new ModelValidationException($"The {propertyName} has the value of a future date!");
             }
         }
-        public void CheckAuditValuesAreDifferent(string oldValuesString, string newValuesString)
+        public void CheckAuditValuesAreDifferent(string? oldValuesString, string? newValuesString)
         {
             if(oldValuesString == newValuesString)
             {

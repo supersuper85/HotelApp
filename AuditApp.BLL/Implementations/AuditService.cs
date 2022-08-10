@@ -20,24 +20,24 @@ namespace AuditApp.BLL.Implementations
         }
         public async Task<IList<AuditDto>> GetAll()
         {
-            var apartments = await _auditRepository.GetAllAsync();
-            return _mapper.Map<IList<AuditDto>>(apartments);
+            var audits = await _auditRepository.GetAllAsync();
+            return _mapper.Map<IList<AuditDto>>(audits);
         }
 
         public async Task<AuditDto> Get(int id)
         {
-            var apartment = await _auditRepository.SingleOrDefaultAsync(x => x.Id == id);
-            var mapped = _mapper.Map<AuditDto>(apartment);
+            var audit = await _auditRepository.SingleOrDefaultAsync(x => x.Id == id);
+            var mappedAudit = _mapper.Map<AuditDto>(audit);
 
-            return mapped;
+            return mappedAudit;
         }
 
         public async Task<AuditDto> Add(AuditDto model)
         {
-            var mappedApartment = _mapper.Map<AuditDto, Audit>(model);
-            var addedApartment = await _auditRepository.AddAsync(mappedApartment);
+            var mappedAudit = _mapper.Map<AuditDto, Audit>(model);
+            var addedAudit = await _auditRepository.AddAsync(mappedAudit);
 
-            return _mapper.Map<AuditDto>(addedApartment);
+            return _mapper.Map<AuditDto>(addedAudit);
         }
         public async Task<bool> Edit(AuditDto model)
         {
