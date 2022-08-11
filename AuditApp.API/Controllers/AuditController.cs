@@ -72,13 +72,15 @@ namespace AuditApp.API.Controllers
         {
             try
             {
-                var apartmentValidator = new AuditValidator();
-                apartmentValidator.CheckAuditPostModel(model);
+
+                var auditValidator = new AuditValidator();
+                auditValidator.CheckAuditPostModel(model);
 
                 var mappedModel = _mapper.Map<AuditDto>(model);
-                var reservation = await _auditService.Add(mappedModel);
+                var audit = await _auditService.Add(mappedModel);
 
-                return Ok(reservation);
+                return Ok(audit);
+
             }
             catch (ModelValidationException e)
             {
@@ -102,8 +104,9 @@ namespace AuditApp.API.Controllers
         {
             try
             {
-                var apartmentValidator = new AuditValidator();
-                apartmentValidator.CheckAuditPutModel(model);
+                var auditValidator = new AuditValidator();
+                auditValidator.CheckAuditPutModel(model);
+
 
                 var mappedModel = _mapper.Map<AuditDto>(model);
                 var isModified = await _auditService.Edit(mappedModel);
@@ -140,8 +143,8 @@ namespace AuditApp.API.Controllers
         {
             try
             {
-                var apartmentValidator = new AuditValidator();
-                apartmentValidator.CheckAuditDeleteModel(model);
+                var auditValidator = new AuditValidator();
+                auditValidator.CheckAuditDeleteModel(model);
 
                 var result = await _auditService.Delete(model.Id);
                 if (result != null)

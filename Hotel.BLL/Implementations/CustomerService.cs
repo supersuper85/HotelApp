@@ -47,12 +47,16 @@ namespace HotelApp.BLL.Implementations
             var customerValidator = new CustomerDatabaseValidator(_reservationRepository, _customerRepository, null, null);
             await customerValidator.CheckCustomerPostModel(model);
 
-            var mappedCustomer = _mapper.Map<CustomerDto, Customer>(model);
 
-            var auditSender = new AuditSender();
-            auditSender.SetInitialValues<Customer>(_httpClient, "Insert", null);
+            var newCustomer = _mapper.Map<CustomerDto, Customer>(model);
 
-            var addedCustomer = await _customerRepository.AddAsync(mappedCustomer);
+            var auditSender = new AuditSender<Customer>(_httpClient);
+
+            var addedCustomer = await _customerRepository.AddAsync(newCustomer);
+
+            var operationIsSuccesfully = addedCustomer != null;
+            if (operationIsSuccesfully)
+                auditSender.ReportPostRequest(newCustomer);
 
             var operationIsSuccesfully = addedCustomer != null;
             await SendAuditPostRequest<Customer>(auditSender, operationIsSuccesfully, addedCustomer);
@@ -62,21 +66,21 @@ namespace HotelApp.BLL.Implementations
         }
         public async Task<bool> Edit(CustomerDto model)
         {
-            var customerEntity = await _customerRepository.GetCustomerByIdAsNoTracking(model.Id);
+            var oldValueOf_Customer = await _customerRepository.GetCustomerByIdAsNoTracking(model.Id);
 
             var customerValidator = new CustomerDatabaseValidator(_reservationRepository, _customerRepository, null, null);
-            await customerValidator.CheckCustomerPutModel(model, customerEntity);
+            await customerValidator.CheckCustomerPutModel(model, oldValueOf_Customer);
 
-            var mappedCustomer = _mapper.Map<CustomerDto, Customer>(model);
+            var newValueOf_Customer = _mapper.Map<CustomerDto, Customer>(model);
 
-            var auditSender = new AuditSender();
-            auditSender.SetInitialValues(_httpClient, "Update", customerEntity);
+            var auditSender = new AuditSender<Customer>(_httpClient);
 
-            var response = await _customerRepository.UpdateAsync(mappedCustomer);
+            var operationIsSuccesfully = await _customerRepository.UpdateAsync(newValueOf_Customer);
 
-            await SendAuditPostRequest(auditSender, response, mappedCustomer);
+            if(operationIsSuccesfully)
+                auditSender.ReportPutRequest(oldValueOf_Customer, newValueOf_Customer);
 
-            return response;
+            return operationIsSuccesfully;
         }
 
         public async Task<CustomerDto> Delete(int id)
@@ -84,17 +88,17 @@ namespace HotelApp.BLL.Implementations
             var customerValidator = new CustomerDatabaseValidator(_reservationRepository, _customerRepository, null, null);
             await customerValidator.CheckCustomerDeleteModel(id);
 
-            var customer = await _customerRepository.SingleOrDefaultAsync(x => x.Id == id);
+            var oldValueOf_Customer = await _customerRepository.SingleOrDefaultAsync(x => x.Id == id);
 
-            var auditSender = new AuditSender();
-            auditSender.SetInitialValues<Customer>(_httpClient, "Delete", customer);
+            var auditSender = new AuditSender<Customer>(_httpClient);
 
-            var response = await _customerRepository.DeleteAsync(customer);
+            var operationIsSuccesfully = await _customerRepository.DeleteAsync(oldValueOf_Customer);
 
-            await SendAuditPostRequest<Customer>(auditSender, response, null);
+            if (operationIsSuccesfully)
+                auditSender.ReportDeleteRequest(oldValueOf_Customer);
 
-            return response ? _mapper.Map<CustomerDto>(customer) : null;
 
+            return operationIsSuccesfully ? _mapper.Map<CustomerDto>(oldValueOf_Customer) : null;
         }
 
 

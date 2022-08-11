@@ -5,7 +5,6 @@ using HotelApp.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
-using Polly;
 
 namespace HotelApp.Data.Implementations
 {

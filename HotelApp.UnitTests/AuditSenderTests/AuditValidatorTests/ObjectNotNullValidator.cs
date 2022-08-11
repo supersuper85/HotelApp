@@ -5,25 +5,26 @@ using Xunit;
 
 namespace HotelApp.UnitTests.AuditSenderTests.AuditValidatorTests
 {
-    public class ObjectHaveAnIdValidator
+    public class ObjectNotNullValidator
     {
         [Fact]
-        public void TestWrongModelInput()
+        public void TestNullInput()
         {
             var auditValidator = new AuditSenderValidator<ModelWithoutId>();
+            var inputObj = new ModelWithoutId(); 
 
-            Action act = () => auditValidator.VerifyObjectHaveAnId();
+            Action act = () => auditValidator.VerifyObjectNotNull(null, nameof(inputObj));
             AuditSenderException exception = Assert.Throws<AuditSenderException>(act);
-            Assert.Equal("The entered model does not contain an ID!", exception.Message);
+            Assert.Equal($"The {nameof(inputObj)} object cannot be null!", exception.Message);
         }
 
         [Fact]
-        public void TestCorrectModelInput()
+        public void TestNotNullInput()
         {
-            var auditValidator = new AuditSenderValidator<ModelWithId>();
+            var auditValidator = new AuditSenderValidator<ModelWithoutId>();
+            var inputObj = new ModelWithoutId();
 
-            Action act = () => auditValidator.VerifyObjectHaveAnId();
-
+            Action act = () => auditValidator.VerifyObjectNotNull(inputObj, nameof(inputObj));
             var exception = Record.Exception(() => act());
             Assert.Null(exception);
         }

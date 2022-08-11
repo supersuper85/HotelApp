@@ -5,6 +5,7 @@ using HotelApp.BLL.Implementations;
 using HotelApp.BLL.Models.AuditModels;
 using HotelApp.Data.Entities;
 using HotelApp.Data.Interfaces;
+using HotelApp.UnitTests.ServicesTests.ServiceHelpers;
 using Moq;
 using Moq.Protected;
 using System.Net;
@@ -33,11 +34,14 @@ namespace HotelApp.UnitTests.ServicesTests
             _reservationRepoMock = new Mock<IReservationRepository>();
             _mapperMock = new Mock<IMapper>();
 
+            var httpClientConfiguration = new HttpClientConfiguration();
+            var httpClient = httpClientConfiguration.GetHttpClient();
+
             _sut = new CustomerService(
                 _customerRepoMock.Object,
                 _reservationRepoMock.Object,
                 _mapperMock.Object,
-                _httpClientMock.Object
+                httpClient
                 );
         }
 
@@ -99,6 +103,7 @@ namespace HotelApp.UnitTests.ServicesTests
 
             _customerRepoMock.Setup(x => x.ExistsAsync(x => x.CNP == It.IsAny<string>(), CancellationToken.None)).ReturnsAsync(true);
             _customerRepoMock.Setup(x => x.AddAsync(databaseCustomer, CancellationToken.None)).ReturnsAsync(databaseCustomer);
+         
 
             var outputResponse = new HttpResponseMessage
             {
@@ -156,31 +161,6 @@ namespace HotelApp.UnitTests.ServicesTests
 
             _customerRepoMock.Setup(x => x.UpdateAsync(databaseCustomer, CancellationToken.None)).ReturnsAsync(true);
 
-            var outputResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(@"{ ""id"": 1, ""entityId"": 1}"),
-            };
-
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock
-                .Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.IsAny<HttpRequestMessage>(),
-                    ItExpr.IsAny<CancellationToken>()
-                )
-                .ReturnsAsync(outputResponse)
-                .Verifiable();
-
-            var httpClient = new HttpClient(handlerMock.Object);
-
-            _sut = new CustomerService(
-                _customerRepoMock.Object,
-                _reservationRepoMock.Object,
-                _mapperMock.Object,
-                httpClient
-                );
 
             //Act
             var expectedResult = true;
@@ -210,31 +190,6 @@ namespace HotelApp.UnitTests.ServicesTests
 
             _mapperMock.Setup(x => x.Map<CustomerDto>(databaseCustomer)).Returns(outputCustomer);
 
-            var outputResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(@"{ ""id"": 1, ""entityId"": 1}"),
-            };
-
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock
-                .Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.IsAny<HttpRequestMessage>(),
-                    ItExpr.IsAny<CancellationToken>()
-                )
-                .ReturnsAsync(outputResponse)
-                .Verifiable();
-
-            var httpClient = new HttpClient(handlerMock.Object);
-
-            _sut = new CustomerService(
-                _customerRepoMock.Object,
-                _reservationRepoMock.Object,
-                _mapperMock.Object,
-                httpClient
-                );
 
             //Act
             var actualResult = await _sut.Delete(inputId);

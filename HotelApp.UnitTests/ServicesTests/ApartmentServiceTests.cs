@@ -3,6 +3,7 @@ using HotelApp.BLL.Dto;
 using HotelApp.BLL.Implementations;
 using HotelApp.Data.Entities;
 using HotelApp.Data.Interfaces;
+using HotelApp.UnitTests.ServicesTests.ServiceHelpers;
 using Moq;
 using Xunit;
 
@@ -20,9 +21,13 @@ namespace HotelApp.UnitTests.ServicesTests
             _apartmentRepoMock = new Mock<IApartmentRepository>();
             _mapperMock = new Mock<IMapper>();
 
+            var httpClientConfiguration = new HttpClientConfiguration();
+            var httpClient = httpClientConfiguration.GetHttpClient();
+
             _sut = new ApartmentService(
                 _apartmentRepoMock.Object,
-                _mapperMock.Object
+                _mapperMock.Object,
+                httpClient
                 );
         }
 
