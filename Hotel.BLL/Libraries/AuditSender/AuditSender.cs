@@ -46,10 +46,6 @@ namespace HotelApp.BLL.Extensions.Audit
 
         public async Task<AuditGetModel> ReportPutRequest<T>(T oldValuesObj, T newValuesObj) where T : class
         {
-            var listOfValues = new List<T>();
-            listOfValues.Add(oldValuesObj);
-            listOfValues.Add(newValuesObj);
-
             var auditValidator = new AuditSenderValidator<T>();
             auditValidator.VerifyObjectNotNull(oldValuesObj, nameof(oldValuesObj));
             auditValidator.VerifyObjectNotNull(newValuesObj, nameof(newValuesObj));

@@ -81,7 +81,6 @@ namespace HotelApp.BLL.Implementations
             newValueOf_Apartment.ReservationId = addedReservation.Id;
             newValueOf_Apartment.CustomerId = customerId;
 
-
             var apartmentAuditSender = new AuditSender<Apartment>(_httpClient);
 
             var modifingApartmentResponse = await _apartmentRepository.UpdateAsync(newValueOf_Apartment);

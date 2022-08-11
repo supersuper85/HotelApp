@@ -23,7 +23,6 @@ namespace HotelApp.UnitTests.AuditSenderTests.AuditValidatorTests
             var auditValidator = new AuditSenderValidator<ModelWithId>();
 
             Action act = () => auditValidator.VerifyObjectHaveAnId();
-
             var exception = Record.Exception(() => act());
             Assert.Null(exception);
         }
