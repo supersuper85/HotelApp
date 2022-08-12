@@ -13,15 +13,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelApp.UnitTests", "Hotel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuditApp.API", "AuditApp.API\AuditApp.API.csproj", "{83AFEDE8-E9F1-4E9F-BA08-60C140AE9E75}"
 EndProject
-
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuditApp.BLL", "AuditApp.BLL\AuditApp.BLL.csproj", "{7E137599-7F59-4372-AC1E-5D02BD0CE13B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuditApp.Data", "AuditApp.Data\AuditApp.Data.csproj", "{EBD571B4-06E9-4997-A9A2-4B098A968983}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelApp.SpecFlow", "HotelApp.SpecFlow\HotelApp.SpecFlow.csproj", "{67EA5798-944D-4316-9088-5DA79EAC8EC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditApp.UnitTests", "AuditApp.UnitTests\AuditApp.UnitTests.csproj", "{EF493A18-2D6B-495A-AD00-F99ECCA1A7BD}"
-
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuditApp.UnitTests", "AuditApp.UnitTests\AuditApp.UnitTests.csproj", "{EF493A18-2D6B-495A-AD00-F99ECCA1A7BD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoAuditApp.API", "MongoAuditApp.API\MongoAuditApp.API.csproj", "{424C3CFF-3017-44C4-875B-D47180B633A2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoAuditApp.BLL", "MongoAuditApp.BLL\MongoAuditApp.BLL.csproj", "{ECC283FE-9522-4D46-BBF8-CA257D08F972}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoAuditApp.Data", "MongoAuditApp.Data\MongoAuditApp.Data.csproj", "{D622C3EB-9EA8-4ADE-83A9-F9F8A73EF2D4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoDbAuditApp.SpecFlow", "MongoDbAuditApp.SpecFlow\MongoDbAuditApp.SpecFlow.csproj", "{7B9425E8-5BD7-458F-83EA-F90F11177093}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditApp.SpecFlow", "AuditApp.SpecFlow\AuditApp.SpecFlow.csproj", "{44BA9A82-123C-4928-B187-C76B60AB2E68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,7 +73,26 @@ Global
 		{EF493A18-2D6B-495A-AD00-F99ECCA1A7BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF493A18-2D6B-495A-AD00-F99ECCA1A7BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF493A18-2D6B-495A-AD00-F99ECCA1A7BD}.Release|Any CPU.Build.0 = Release|Any CPU
-
+		{424C3CFF-3017-44C4-875B-D47180B633A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{424C3CFF-3017-44C4-875B-D47180B633A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{424C3CFF-3017-44C4-875B-D47180B633A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{424C3CFF-3017-44C4-875B-D47180B633A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECC283FE-9522-4D46-BBF8-CA257D08F972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECC283FE-9522-4D46-BBF8-CA257D08F972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECC283FE-9522-4D46-BBF8-CA257D08F972}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECC283FE-9522-4D46-BBF8-CA257D08F972}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D622C3EB-9EA8-4ADE-83A9-F9F8A73EF2D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D622C3EB-9EA8-4ADE-83A9-F9F8A73EF2D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D622C3EB-9EA8-4ADE-83A9-F9F8A73EF2D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D622C3EB-9EA8-4ADE-83A9-F9F8A73EF2D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B9425E8-5BD7-458F-83EA-F90F11177093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B9425E8-5BD7-458F-83EA-F90F11177093}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B9425E8-5BD7-458F-83EA-F90F11177093}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B9425E8-5BD7-458F-83EA-F90F11177093}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44BA9A82-123C-4928-B187-C76B60AB2E68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44BA9A82-123C-4928-B187-C76B60AB2E68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44BA9A82-123C-4928-B187-C76B60AB2E68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44BA9A82-123C-4928-B187-C76B60AB2E68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

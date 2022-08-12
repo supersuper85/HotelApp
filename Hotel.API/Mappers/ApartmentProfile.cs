@@ -10,6 +10,7 @@ namespace HotelApp.API.Mappers
         {
             CreateMap<ApartmentModel, ApartmentDto>().ReverseMap();
             CreateMap<ApartmentCreateModel, ApartmentDto>().ReverseMap();
+            CreateMap<ApartmentEditModel, ApartmentDto>().ReverseMap();
         }
     }
 }
