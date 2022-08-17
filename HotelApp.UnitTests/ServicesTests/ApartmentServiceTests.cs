@@ -88,6 +88,10 @@ namespace HotelApp.UnitTests.ServicesTests
 
             _mapperMock.Setup(x => x.Map<ApartmentDto>(databaseApartment)).Returns(outputApartment);
 
+
+            
+
+
             //Act
             var actualResult = await _sut.Add(inputApartment);
 
@@ -108,6 +112,7 @@ namespace HotelApp.UnitTests.ServicesTests
             _apartmentRepoMock.Setup(x => x.SingleOrDefaultAsync(x => x.Id == inputApartment.Id, CancellationToken.None)).ReturnsAsync(databaseApartment);
 
             _apartmentRepoMock.Setup(x => x.UpdateAsync(databaseApartment, CancellationToken.None)).ReturnsAsync(true);
+
 
             //Act
             var expectedResult = true;
@@ -134,6 +139,7 @@ namespace HotelApp.UnitTests.ServicesTests
 
             _apartmentRepoMock.Setup(x => x.UpdateAsync(databaseApartment, CancellationToken.None)).ReturnsAsync(true);
 
+
             //Act
             var expectedResult = true;
             var actualResult = await _sut.Edit(inputApartment);
@@ -154,6 +160,7 @@ namespace HotelApp.UnitTests.ServicesTests
             _apartmentRepoMock.Setup(x => x.DeleteAsync(databaseApartment, CancellationToken.None)).ReturnsAsync(true);
 
             _mapperMock.Setup(x => x.Map<ApartmentDto>(databaseApartment)).Returns(outputApartment);
+
 
             //Act
             var actualResult = await _sut.Delete(inputId);

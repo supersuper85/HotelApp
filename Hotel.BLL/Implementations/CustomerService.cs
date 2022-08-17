@@ -47,7 +47,6 @@ namespace HotelApp.BLL.Implementations
             var customerValidator = new CustomerDatabaseValidator(_reservationRepository, _customerRepository, null, null);
             await customerValidator.CheckCustomerPostModel(model);
 
-
             var newCustomer = _mapper.Map<CustomerDto, Customer>(model);
 
             var auditSender = new AuditSender<Customer>(_httpClient);
@@ -57,9 +56,6 @@ namespace HotelApp.BLL.Implementations
             var operationIsSuccesfully = addedCustomer != null;
             if (operationIsSuccesfully)
                 auditSender.ReportPostRequest(newCustomer);
-
-            var operationIsSuccesfully = addedCustomer != null;
-            await SendAuditPostRequest<Customer>(auditSender, operationIsSuccesfully, addedCustomer);
 
             return _mapper.Map<CustomerDto>(addedCustomer);
 
@@ -97,27 +93,8 @@ namespace HotelApp.BLL.Implementations
             if (operationIsSuccesfully)
                 auditSender.ReportDeleteRequest(oldValueOf_Customer);
 
-
             return operationIsSuccesfully ? _mapper.Map<CustomerDto>(oldValueOf_Customer) : null;
-        }
 
-
-        public async Task<AuditGetModel> SendAuditPostRequest<T>(AuditSender auditSender, bool operationIsSuccessfuly, T entity)  where T : class
-        {
-            try
-            {
-                if (operationIsSuccessfuly)
-                {
-                    auditSender.SetNewValues(entity);
-                    await auditSender.SendPostRequest();
-                }
-            }
-            catch
-            {
-                auditSender.ResetConfiguration();
-            }
-
-            return null;
         }
     }
 }

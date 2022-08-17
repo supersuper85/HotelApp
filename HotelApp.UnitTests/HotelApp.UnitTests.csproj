@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AuditApp.API\AuditApp.API.csproj" />
     <ProjectReference Include="..\Hotel.API\HotelApp.API.csproj" />
     <ProjectReference Include="..\Hotel.BLL\HotelApp.BLL.csproj" />
     <ProjectReference Include="..\Hotel.Data\HotelApp.Data.csproj" />
