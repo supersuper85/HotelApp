@@ -6,7 +6,7 @@ A short summary of the feature
 Scenario: Add Apartment
 	Given The apartment 
 		| DailyRentInEuro  | NumberOfRooms    | ApartmentNumber | HotelId |
-		| 25               | 2                | 19               | 1       | 
+		| 25               | 2                | 19              | 1       | 
 	When I press create apartment button
 	Then Apartment is created successfully
 
@@ -24,7 +24,7 @@ Scenario: Edit Apartment
 Scenario: Delete Apartment
 	Given The apartment 
 		| DailyRentInEuro  | NumberOfRooms    | ApartmentNumber | HotelId |
-		| 25               | 2                | 19               | 1       | 
+		| 25               | 2                | 19              | 1       | 
 	When I press delete apartment button
 	Then Apartment is deleted successfully
 
